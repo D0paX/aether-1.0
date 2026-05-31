@@ -180,3 +180,12 @@ Confirm long path support was enabled and Windows was restarted after enabling i
 
 ### MSVC not found by GN
 Ensure `vs2022_install` environment variable points to the correct Visual Studio installation path.
+
+## Step 9 — Install Git Hooks
+
+After cloning the repository, run the hooks installation script to configure commit message rules and security checks:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File tools\scripts\setup-hooks.ps1
+```
+
