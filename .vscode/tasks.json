@@ -1,0 +1,55 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "WebUI: Dev Server",
+      "type": "shell",
+      "command": "pnpm webui:dev",
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": []
+    },
+    {
+      "label": "WebUI: Build",
+      "type": "shell",
+      "command": "pnpm webui:build",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": ["$tsc"]
+    },
+    {
+      "label": "WebUI: Lint",
+      "type": "shell",
+      "command": "pnpm webui:lint",
+      "group": "test",
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "problemMatcher": ["$eslint-stylish"]
+    },
+    {
+      "label": "Verify Environment",
+      "type": "shell",
+      "command": "powershell -ExecutionPolicy Bypass -File tools/scripts/verify-env.ps1",
+      "group": "none",
+      "presentation": {
+        "reveal": "always",
+        "panel": "new"
+      },
+      "problemMatcher": [],
+      "windows": {
+        "command": "powershell -ExecutionPolicy Bypass -File tools/scripts/verify-env.ps1"
+      }
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "@aether/webui",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Aether Browser WebUI — React + TypeScript browser chrome and pages",
+  "type": "module",
+  "scripts": {
+    "dev": "echo 'WebUI build pipeline not yet configured. See batch-06.'",
+    "build": "echo 'WebUI build pipeline not yet configured. See batch-06.'",
+    "lint": "echo 'Linting not yet configured. See batch-06.'",
+    "test": "echo 'Tests not yet configured. See batch-06.'"
+  },
+  "dependencies": {},
+  "devDependencies": {}
+}

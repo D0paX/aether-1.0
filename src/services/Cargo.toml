@@ -1,0 +1,9 @@
+# Aether Browser — Rust Services Workspace
+# Services are added in batch-16-ai-foundation and batch-18-sync-backend.
+
+[workspace]
+members = [
+    "ai-service",
+    "sync-service",
+]
+resolver = "2"

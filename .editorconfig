@@ -1,0 +1,47 @@
+# Aether Browser — EditorConfig
+# https://editorconfig.org
+
+root = true
+
+[*]
+indent_style = space
+indent_size = 2
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+[*.{cc,cpp,h,c,mm}]
+# Chromium C++ uses 2-space indentation
+indent_size = 2
+
+[*.rs]
+# Rust convention
+indent_size = 4
+
+[*.py]
+# PEP 8
+indent_size = 4
+
+[*.go]
+indent_style = tab
+
+[Makefile]
+indent_style = tab
+
+[*.md]
+# Trailing spaces are intentional in Markdown (line breaks)
+trim_trailing_whitespace = false
+max_line_length = off
+
+[*.{json,jsonc}]
+indent_size = 2
+
+[*.{yml,yaml}]
+indent_size = 2
+
+[*.{gn,gni}]
+indent_size = 2
+
+[*.{ts,tsx,js,jsx}]
+indent_size = 2

@@ -1,0 +1,79 @@
+# Aether Browser — .gitignore
+# Chromium-based browser project. See docs/development/SETUP_WINDOWS.md for build setup.
+
+# SECTION 1 — Chromium and Brave Build Output
+# Chromium build output can exceed 100GB. Never commit these under any circumstances.
+out/
+out.gn/
+*.ninja_deps
+*.ninja_log
+.gclient
+.gclient_entries
+*.stamp
+*.pyc
+__pycache__/
+
+# SECTION 2 — Node.js
+node_modules/
+npm-debug.log*
+yarn-error.log*
+.pnp.*
+.yarn/cache/
+.yarn/unplugged/
+
+# SECTION 3 — Rust Build Artifacts
+# Note: Cargo.lock for binary crates (ai-service, sync-service) SHOULD be committed.
+# Only ignore Cargo.lock for library crates if they exist.
+target/
+
+# SECTION 4 — Frontend Build Output
+dist/
+.vite/
+*.tsbuildinfo
+
+# SECTION 5 — Environment and Secrets
+# Never commit secrets, API keys, or local environment overrides.
+.env
+.env.local
+.env.*.local
+*.pem
+*.key
+secrets/
+
+# SECTION 6 — IDE Files
+# .vscode/ is intentionally tracked and should NOT appear here.
+.idea/
+*.suo
+*.user
+.vs/
+*.sln.docstates
+
+# SECTION 7 — Operating System Files
+.DS_Store
+Thumbs.db
+desktop.ini
+*.lnk
+
+# SECTION 8 — Test and Coverage
+coverage/
+*.lcov
+test-results/
+.vitest/
+playwright-report/
+
+# SECTION 9 — Logs and Crash Reports
+*.log
+logs/
+crash_reports/
+
+# SECTION 10 — Temporary Files
+*.tmp
+*.temp
+*.bak
+*.swp
+*~
+
+# SECTION 11 — Research and External Repositories
+# Cloned external repositories for reference only. Never commit these.
+# See SOURCE_CLASSIFICATION.md for details.
+.aether/research/
