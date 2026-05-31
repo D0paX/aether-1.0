@@ -1,2 +1,5 @@
+# Aether Browser — pnpm Workspace
+# Defines all packages managed by pnpm in the monorepo.
+
 packages:
   - 'src/webui'

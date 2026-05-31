@@ -1,0 +1,37 @@
+#!/bin/sh
+# Aether Browser — commit-msg hook
+# Validates commit messages follow Conventional Commits format.
+# See docs/contributing/COMMIT_CONVENTION.md
+
+COMMIT_MSG_FILE=$1
+COMMIT_MSG=$(cat "$COMMIT_MSG_FILE")
+
+# Allow merge commits
+if echo "$COMMIT_MSG" | grep -qE "^Merge "; then
+  exit 0
+fi
+
+# Allow revert commits
+if echo "$COMMIT_MSG" | grep -qE "^Revert "; then
+  exit 0
+fi
+
+# Validate conventional commit format
+PATTERN="^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([a-z0-9_-]+\))?: .{1,100}$"
+
+FIRST_LINE=$(echo "$COMMIT_MSG" | head -n1)
+
+if ! echo "$FIRST_LINE" | grep -qE "$PATTERN"; then
+  echo ""
+  echo "ERROR: Commit message does not follow Conventional Commits format."
+  echo ""
+  echo "Expected format: <type>(<scope>): <description>"
+  echo "Example: feat(tabs): add tab sleeping after 30 minutes of inactivity"
+  echo ""
+  echo "Valid types: feat, fix, docs, style, refactor, perf, test, build, ci, chore, revert"
+  echo "See docs/contributing/COMMIT_CONVENTION.md for full reference."
+  echo ""
+  exit 1
+fi
+
+exit 0

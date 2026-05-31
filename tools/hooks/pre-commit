@@ -1,0 +1,37 @@
+#!/bin/sh
+# Aether Browser — pre-commit hook
+# Prevents committing secrets, build artifacts, and other forbidden files.
+
+ERRORS=0
+
+# Check for .env files with content
+if git diff --cached --name-only | grep -qE "^\.env($|\.)"; then
+  echo "ERROR: Attempting to commit an .env file. Remove it from staging: git reset HEAD .env"
+  ERRORS=$((ERRORS + 1))
+fi
+
+# Check for private key files
+if git diff --cached --name-only | grep -qE "\.(pem|key|p12|pfx)$"; then
+  echo "ERROR: Attempting to commit a private key or certificate file."
+  ERRORS=$((ERRORS + 1))
+fi
+
+# Check for files in out/ directory (should be in .gitignore but double-check)
+if git diff --cached --name-only | grep -qE "^out/"; then
+  echo "ERROR: Attempting to commit files from the Chromium out/ directory. These are build artifacts."
+  ERRORS=$((ERRORS + 1))
+fi
+
+# Check for node_modules
+if git diff --cached --name-only | grep -qE "node_modules/"; then
+  echo "ERROR: Attempting to commit node_modules. These should be gitignored."
+  ERRORS=$((ERRORS + 1))
+fi
+
+if [ $ERRORS -gt 0 ]; then
+  echo ""
+  echo "Pre-commit checks failed. Fix the issues above and try again."
+  exit 1
+fi
+
+exit 0
