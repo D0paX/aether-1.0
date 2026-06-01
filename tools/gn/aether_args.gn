@@ -1,0 +1,73 @@
+# Aether Browser — GN Build Arguments
+# Apply these args when running: gn gen out/AetherDebug --args="$(cat aether/tools/gn/aether_args.gn | grep -v '^#' | tr '\n' ' ')"
+# Or use tools/scripts/build.ps1 which applies them automatically.
+
+import("//aether/tools/gn/aether_branding.gni")
+
+# ─────────────────────────────────────────────────
+# DEVELOPMENT BUILD ARGS
+# Use these for daily development.
+# ─────────────────────────────────────────────────
+
+# The branding path component to use for build configuration (set to Aether product name).
+branding_path_component = aether_product_name
+
+# Component build: each Chromium component compiles to a separate DLL.
+# This makes incremental builds 5-10x faster. Never use in release builds.
+is_component_build = true
+
+# Disable debug mode for slightly faster builds while keeping most optimizations.
+# Set to true only when debugging specific issues (makes builds slower).
+is_debug = false
+
+# Symbol level: 0=none, 1=minimal (function names only), 2=full (line numbers).
+# Level 1 gives useful crash stack traces without the 30GB+ symbol bloat of level 2.
+symbol_level = 1
+
+# Target architecture: x64 for modern Windows.
+target_cpu = "x64"
+
+# Disable NaCl (Native Client). Aether does not use NaCl. Removing it speeds up the build.
+enable_nacl = false
+
+# Enable proprietary codecs: H.264, AAC, MP3.
+# Required to play video on mainstream sites (YouTube, Netflix, etc.).
+proprietary_codecs = true
+
+# Use Chrome's ffmpeg branding to enable all proprietary codecs.
+# "Chrome" enables codecs that "Chromium" does not include.
+ffmpeg_branding = "Chrome"
+
+# Do not use official Google API keys. Aether uses its own keys (configured separately).
+use_official_google_api_keys = false
+
+# Use LLD linker on Windows. Significantly faster than the MSVC linker.
+use_lld = true
+
+# Disable Link Time Optimization in development. LTO improves binary size and performance
+# but adds 30-60 minutes to every build. Enable only for release.
+use_thin_lto = false
+
+# Number of concurrent link jobs. Linking is extremely memory-intensive.
+# On machines with 32 GB RAM, 2 concurrent links is safe.
+# On machines with 16 GB RAM, use 1.
+concurrent_links = 2
+
+# ─────────────────────────────────────────────────
+# RELEASE BUILD ARGS (overrides — replace the above)
+# Use these for release candidate builds only.
+# ─────────────────────────────────────────────────
+
+# For a release build, use these values instead:
+#
+# is_component_build = false   # Single binary, smaller and faster
+# is_debug = false
+# symbol_level = 0             # No symbols in release binary
+# target_cpu = "x64"
+# enable_nacl = false
+# proprietary_codecs = true
+# ffmpeg_branding = "Chrome"
+# use_official_google_api_keys = false
+# use_lld = true
+# use_thin_lto = true          # Enable LTO for production binary optimization
+# concurrent_links = 1         # LTO uses much more memory, serialize linking

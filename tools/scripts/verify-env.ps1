@@ -15,19 +15,19 @@ $total = 15
 
 function Print-Pass($name, $details) {
     Write-Host "[PASS] " -ForegroundColor Green -NoNewline
-    Write-Host "$name: $details"
+    Write-Host "$($name): $details"
     $script:passed++
 }
 
 function Print-Fail($name, $details) {
     Write-Host "[FAIL] " -ForegroundColor Red -NoNewline
-    Write-Host "$name: $details"
+    Write-Host "$($name): $details"
     $script:failed++
 }
 
 function Print-Warn($name, $details) {
     Write-Host "[WARN] " -ForegroundColor Yellow -NoNewline
-    Write-Host "$name: $details"
+    Write-Host "$($name): $details"
     $script:warnings++
 }
 
