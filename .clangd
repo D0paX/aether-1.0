@@ -7,12 +7,15 @@ CompileFlags:
   Add:
     - "-std=c++20"
     - "-xc++"
+    - "-I.."
+    - "-IC:/src/brave-browser/src"
+    - "-IC:/src/brave-browser/src/out/AetherDebug/gen"
   # Remove compiler flags that clangd does not understand
   Remove:
     - "-Wno-unused-but-set-variable"
 
 InlayHints:
-  Enabled: No
+  Enabled: false
 
 Diagnostics:
   # Suppress Chromium's macro-heavy code from generating noise

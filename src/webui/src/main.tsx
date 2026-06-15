@@ -1,7 +1,18 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
+import { useUIStore } from "./chrome/store/uiStore";
 import "./styles/globals.css";
+
+declare global {
+  interface Window {
+    useUIStore?: typeof useUIStore;
+  }
+}
+
+if (import.meta.env.DEV) {
+  window.useUIStore = useUIStore;
+}
 
 // The HTML entry point (index.html) guarantees that the element with id "root" exists,
 // so a non-null assertion here is safe.

@@ -85,6 +85,14 @@ Reference docs/architecture/WEBUI_SYSTEM.md for usage guidelines.
   --z-modal-overlay: 900;
   --z-modal: 1000;
   --z-tooltip: 1100;
+
+  /* LAYOUT DIMENSIONS */
+  --height-titlebar: 38px;
+  --height-tabbar: 38px;
+  --height-toolbar: 46px;
+  --height-statusbar: 22px;
+  --width-sidebar: 240px;
+  --width-sidebar-collapsed: 0px;
 }
 
 [data-theme="dark"] {

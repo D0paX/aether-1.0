@@ -2,8 +2,6 @@ import React from "react";
 import WindowControls from "./WindowControls";
 import "./TitleBar.css";
 
-export const TITLE_BAR_HEIGHT = "38px";
-
 /**
  * TitleBar component representing Aether's custom draggable window border.
  * Features centered title branding and Windows window controls.
