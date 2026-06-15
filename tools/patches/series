@@ -7,4 +7,5 @@
 0005-remove-brave-update-service.patch
 0006-disable-brave-sync.patch
 0007-aether-sync-endpoints.patch
+0008-aether-webui-test-page.patch
 

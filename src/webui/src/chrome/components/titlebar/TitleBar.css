@@ -1,0 +1,69 @@
+.title-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 38px;
+  background-color: var(--color-surface);
+  backdrop-filter: blur(var(--blur-md));
+  -webkit-backdrop-filter: blur(var(--blur-md));
+  border-bottom: 1px solid var(--color-border);
+  -webkit-app-region: drag;
+  app-region: drag;
+  user-select: none;
+}
+
+.title-bar-left {
+  display: flex;
+  align-items: center;
+  width: 138px; /* Matching the width of the right controls to keep title perfectly centered */
+  height: 100%;
+}
+
+.title-bar-center {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.title-bar-right {
+  display: flex;
+  align-items: center;
+  height: 100%;
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+}
+
+.window-controls {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.window-control-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 46px;
+  height: 100%;
+  border: none;
+  background: transparent;
+  padding: 0;
+  margin: 0;
+  color: var(--color-text-secondary);
+  cursor: default;
+  outline: none;
+  -webkit-app-region: no-drag;
+  app-region: no-drag;
+  position: relative;
+}
+
+.window-control-btn svg {
+  z-index: 1;
+}

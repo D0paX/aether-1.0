@@ -1,0 +1,104 @@
+/*
+This file is the single source of truth for all design values in Aether.
+No component may hardcode a color, spacing, radius, shadow, or duration value.
+Reference docs/architecture/WEBUI_SYSTEM.md for usage guidelines.
+*/
+
+:root {
+  /* COLOR — Light mode (default) */
+  --color-bg: #f5f5f7;
+  --color-surface: rgba(250, 250, 252, 0.92);
+  --color-surface-elevated: #ffffff;
+  --color-glass: rgba(255, 255, 255, 0.78);
+  --color-border: rgba(0, 0, 0, 0.09);
+  --color-border-strong: rgba(0, 0, 0, 0.14);
+  --color-accent: #0071e3;
+  --color-accent-glow: rgba(0, 113, 227, 0.18);
+  --color-text-primary: #1d1d1f;
+  --color-text-secondary: #6e6e73;
+  --color-text-tertiary: #aeaeb2;
+  --color-danger: #ff3b30;
+  --color-warning: #ff9f0a;
+  --color-success: #34c759;
+  --color-traffic-red: #ff5f57;
+  --color-traffic-yellow: #febc2e;
+  --color-traffic-green: #28c840;
+  --color-hover-overlay: rgba(0, 0, 0, 0.05);
+
+  /* TYPOGRAPHY */
+  --font-family-base: -apple-system, "Segoe UI Variable", "Inter", system-ui, sans-serif;
+  --font-size-xs: 11px;
+  --font-size-sm: 12.5px;
+  --font-size-base: 14px;
+  --font-size-md: 15px;
+  --font-size-lg: 17px;
+  --font-size-xl: 22px;
+  --font-size-2xl: 28px;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --line-height-tight: 1.2;
+  --line-height-base: 1.5;
+
+  /* SPACING (4px base scale) */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* RADIUS */
+  --radius-sm: 6px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* SHADOWS / ELEVATION */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-xl: 0 16px 48px rgba(0, 0, 0, 0.18);
+
+  /* BLUR (glassmorphism) */
+  --blur-sm: 12px;
+  --blur-md: 20px;
+  --blur-lg: 32px;
+
+  /* MOTION */
+  --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --ease-spring-out: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-decelerate: cubic-bezier(0, 0, 0.2, 1);
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+
+  /* Z-INDEX SCALE */
+  --z-base: 0;
+  --z-dropdown: 100;
+  --z-sidebar: 200;
+  --z-modal-overlay: 900;
+  --z-modal: 1000;
+  --z-tooltip: 1100;
+}
+
+[data-theme="dark"] {
+  /* COLOR — Dark mode */
+  --color-bg: #1c1c1e;
+  --color-surface: rgba(28, 28, 30, 0.92);
+  --color-surface-elevated: #2c2c2e;
+  --color-glass: rgba(44, 44, 46, 0.78);
+  --color-border: rgba(255, 255, 255, 0.08);
+  --color-border-strong: rgba(255, 255, 255, 0.13);
+  --color-accent: #0a84ff;
+  --color-accent-glow: rgba(10, 132, 255, 0.22);
+  --color-text-primary: #f5f5f7;
+  --color-text-secondary: #98989d;
+  --color-text-tertiary: #636366;
+  --color-hover-overlay: rgba(255, 255, 255, 0.08);
+}

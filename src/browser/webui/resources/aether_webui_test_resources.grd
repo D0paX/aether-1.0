@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<grit latest_public_release="0" current_release="1" output_all_resource_defines="false">
+  <outputs>
+    <output filename="grit/aether_webui_test_resources.h" type="rc_header">
+      <emit emit_type='allow_keys' />
+    </output>
+    <output filename="grit/aether_webui_test_resources_map.cc" type="resource_file_map_source" />
+    <output filename="grit/aether_webui_test_resources_map.h" type="resource_map_header" />
+    <output filename="aether_webui_test_resources.pak" type="data_package" />
+  </outputs>
+  <release seq="1">
+    <includes>
+      <include name="IDR_AETHER_WEBUI_TEST_INDEX_HTML" file="../../../webui/dist/index.html" type="BINDATA" compress="gzip" />
+      <include name="IDR_AETHER_WEBUI_TEST_INDEX_JS" file="../../../webui/dist/assets/index.js" type="BINDATA" compress="gzip" />
+      <include name="IDR_AETHER_WEBUI_TEST_INDEX_CSS" file="../../../webui/dist/assets/index.css" type="BINDATA" compress="gzip" />
+    </includes>
+  </release>
+</grit>
