@@ -1,0 +1,84 @@
+From: Aether Team <dev@aetherbrowser.org>
+Date: Mon, 15 Jun 2026 00:00:00 +0000
+Subject: [PATCH 0008] feat(sync): redirect Brave Sync and Account domains to Aether placeholders
+
+Replaces Brave sync and account domains in the network allowed lists
+and transport security generator input files with Aether placeholder domains.
+
+---
+ brave/browser/net/brave_network_audit_allowed_lists.h      | 12 ++++++------
+ .../transport_security_state_generator/input_file_parsers.cc | 12 ++++++------
+ 2 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/brave/browser/net/brave_network_audit_allowed_lists.h b/brave/browser/net/brave_network_audit_allowed_lists.h
+--- a/brave/browser/net/brave_network_audit_allowed_lists.h
++++ b/brave/browser/net/brave_network_audit_allowed_lists.h
+@@ -48,9 +48,9 @@ inline constexpr auto kAllowedUrlPrefixes = std::to_array<std::string_view>({
+     // brave sync v2 production
+-    "https://sync-v2.brave.com/v2",
++    "https://sync.aether.browser/v2",
+ 
+     // brave sync v2 staging
+-    "https://sync-v2.bravesoftware.com/v2",
++    "https://sync-staging.aether.browser/v2",
+ 
+     // brave sync v2 dev
+-    "https://sync-v2.brave.software/v2",
++    "https://sync-dev.aether.browser/v2",
+diff --git a/chromium_src/net/tools/transport_security_state_generator/input_file_parsers.cc b/chromium_src/net/tools/transport_security_state_generator/input_file_parsers.cc
+--- a/chromium_src/net/tools/transport_security_state_generator/input_file_parsers.cc
++++ b/chromium_src/net/tools/transport_security_state_generator/input_file_parsers.cc
+@@ -77,3 +77,3 @@ constexpr std::string_view kBravePinsJson = R"brave_pins_json({
+-    { "name": "sync-v2.brave.com", "pins": "brave"},
+-    { "name": "sync-v2.brave.software", "pins": "brave"},
+-    { "name": "sync-v2.bravesoftware.com", "pins": "brave"},
++    { "name": "sync.aether.browser", "pins": "brave"},
++    { "name": "sync-dev.aether.browser", "pins": "brave"},
++    { "name": "sync-staging.aether.browser", "pins": "brave"},
+@@ -142,3 +142,3 @@ constexpr std::string_view kBravePinsJson = R"brave_pins_json({
+-    { "name": "account.brave.com", "pins": "brave"},
+-    { "name": "account.bravesoftware.com", "pins": "brave"},
+-    { "name": "account.brave.software", "pins": "brave"},
++    { "name": "account.aether.browser", "pins": "brave"},
++    { "name": "account-staging.aether.browser", "pins": "brave"},
++    { "name": "account-dev.aether.browser", "pins": "brave"},
+@@ -272,14 +272,14 @@ constexpr std::string_view kBraveHstsJson = R"brave_hsts_json({
+     {
+-      "name": "sync-v2.brave.com",
++      "name": "sync.aether.browser",
+       "policy": "custom",
+       "mode": "force-https"
+     },
+     {
+-      "name": "sync-v2.brave.software",
++      "name": "sync-dev.aether.browser",
+       "policy": "custom",
+       "mode": "force-https"
+     },
+     {
+-      "name": "sync-v2.bravesoftware.com",
++      "name": "sync-staging.aether.browser",
+       "policy": "custom",
+       "mode": "force-https"
+     },
+@@ -530,14 +530,14 @@ constexpr std::string_view kBraveHstsJson = R"brave_hsts_json({
+     {
+-      "name": "account.brave.com",
++      "name": "account.aether.browser",
+       "mode": "force-https",
+       "policy": "custom"
+     },
+     {
+-      "name": "account.bravesoftware.com",
++      "name": "account-staging.aether.browser",
+       "mode": "force-https",
+       "policy": "custom"
+     },
+     {
+-      "name": "account.brave.software",
++      "name": "account-dev.aether.browser",
+       "mode": "force-https",
+       "policy": "custom"
+     }
+-- 
+2.54.0

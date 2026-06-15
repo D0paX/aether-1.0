@@ -12,6 +12,33 @@ import("//aether/tools/gn/aether_branding.gni")
 # The branding path component to use for build configuration (set to Aether product name).
 branding_path_component = aether_product_name
 
+# Aether does not include Brave Wallet.
+# This feature was disabled using the GN build flag approach (enable_brave_wallet = false)
+# because it is the officially supported upstream mechanism to cleanly exclude the wallet
+# components, assets, and UI code from the build pipeline without requiring complex patches.
+enable_brave_wallet = false
+
+# Aether does not include Brave Rewards and BAT token integration.
+# This feature was disabled using the GN build flag approach (enable_brave_rewards = false)
+# because it is the officially supported upstream mechanism to cleanly exclude the rewards
+# components, assets, and UI code from the build pipeline without requiring complex patches.
+enable_brave_rewards = false
+
+# Aether does not include Brave News.
+# This feature was disabled using the GN build flag approach (enable_brave_news = false)
+# because it is the officially supported upstream mechanism to cleanly exclude the news feed,
+# settings, and NTP widget dependencies from the compilation pipeline.
+enable_brave_news = false
+
+# Aether does not include Brave Ads.
+enable_brave_ads = false
+
+# Aether base service domains redirection (prevents accessing Brave's backend infrastructure)
+brave_services_production_domain = "aetherbrowser.com"
+brave_services_staging_domain = "staging.aetherbrowser.com"
+brave_services_dev_domain = "dev.aetherbrowser.com"
+
+
 # Component build: each Chromium component compiles to a separate DLL.
 # This makes incremental builds 5-10x faster. Never use in release builds.
 is_component_build = true
