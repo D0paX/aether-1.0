@@ -1,0 +1,13 @@
+import("//mojo/public/tools/bindings/mojom.gni")
+
+mojom("aether_window_controls") {
+  sources = [
+    "window_controls.mojom",
+  ]
+
+  public_deps = [
+    "//mojo/public/mojom/base",
+  ]
+
+  webui_module_path = "/"
+}

@@ -1,0 +1,182 @@
+From: Aether Team <dev@aetherbrowser.org>
+Date: Mon, 15 Jun 2026 00:00:00 +0000
+Subject: [PATCH 0009] feat(browser): implement window controls Mojo handler
+
+WindowControlsHandler implements minimize/maximize/restore/close and
+maximize-state observation via views::Widget.
+---
+ aether/src/browser/webui/handlers/aether_window_controls_handler.cc | 92 ++++++++++++++++++++
+ aether/src/browser/webui/handlers/aether_window_controls_handler.h  | 56 ++++++++++++++++++++
+ 2 files changed, 148 insertions(+)
+ create mode 100644 aether/src/browser/webui/handlers/aether_window_controls_handler.cc
+ create mode 100644 aether/src/browser/webui/handlers/aether_window_controls_handler.h
+
+diff --git a/aether/src/browser/webui/handlers/aether_window_controls_handler.h b/aether/src/browser/webui/handlers/aether_window_controls_handler.h
+new file mode 100644
+--- /dev/null
++++ b/aether/src/browser/webui/handlers/aether_window_controls_handler.h
+@@ -0,0 +1,56 @@
++// Aether Browser — Window Controls Handler
++// Implements aether::mojom::WindowControls (see
++// src/browser/webui/mojom/window_controls.mojom). Bridges the Aether chrome
++// WebUI to native window management via views::Widget.
++
++#ifndef BROWSER_WEBUI_HANDLERS_AETHER_WINDOW_CONTROLS_HANDLER_H_
++#define BROWSER_WEBUI_HANDLERS_AETHER_WINDOW_CONTROLS_HANDLER_H_
++
++#include "aether/src/browser/webui/mojom/window_controls.mojom.h"
++#include "mojo/public/cpp/bindings/pending_receiver.h"
++#include "mojo/public/cpp/bindings/pending_remote.h"
++#include "mojo/public/cpp/bindings/receiver.h"
++#include "mojo/public/cpp/bindings/remote_set.h"
++#include "ui/views/widget/widget_observer.h"
++
++class Browser;
++
++namespace views {
++class Widget;
++}
++
++class AetherWindowControlsHandler : public aether::mojom::WindowControls,
++                                    public views::WidgetObserver {
++ public:
++  AetherWindowControlsHandler(
++      mojo::PendingReceiver<aether::mojom::WindowControls> receiver,
++      Browser* browser);
++  ~AetherWindowControlsHandler() override;
++
++  AetherWindowControlsHandler(const AetherWindowControlsHandler&) = delete;
++  AetherWindowControlsHandler& operator=(const AetherWindowControlsHandler&) = delete;
++
++  // aether::mojom::WindowControls:
++  void Minimize() override;
++  void Maximize() override;
++  void Restore() override;
++  void Close() override;
++  void IsMaximized(IsMaximizedCallback callback) override;
++  void AddObserver(
++      mojo::PendingRemote<aether::mojom::WindowControlsObserver> observer) override;
++
++  // views::WidgetObserver:
++  void OnWidgetBoundsChanged(views::Widget* widget,
++                             const gfx::Rect& new_bounds) override;
++  void OnWidgetDestroying(views::Widget* widget) override;
++
++ private:
++  views::Widget* GetWidget() const;
++
++  mojo::Receiver<aether::mojom::WindowControls> receiver_;
++  Browser* const browser_;
++  views::Widget* widget_ = nullptr;
++
++  // Keep track of the last known maximized state.
++  bool last_maximized_state_ = false;
++
++  // List of registered observers on the WebUI side.
++  mojo::RemoteSet<aether::mojom::WindowControlsObserver> observers_;
++};
++
++#endif  // BROWSER_WEBUI_HANDLERS_AETHER_WINDOW_CONTROLS_HANDLER_H_
+diff --git a/aether/src/browser/webui/handlers/aether_window_controls_handler.cc b/aether/src/browser/webui/handlers/aether_window_controls_handler.cc
+new file mode 100644
+--- /dev/null
++++ b/aether/src/browser/webui/handlers/aether_window_controls_handler.cc
+@@ -0,0 +1,92 @@
++// Aether Browser — Window Controls Handler
++// Implements aether::mojom::WindowControls (see
++// src/browser/webui/mojom/window_controls.mojom). Bridges the Aether chrome
++// WebUI to native window management via views::Widget.
++
++#include "aether/src/browser/webui/handlers/aether_window_controls_handler.h"
++
++#include "chrome/browser/ui/browser.h"
++#include "chrome/browser/ui/browser_commands.h"
++#include "chrome/browser/ui/browser_window.h"
++#include "chrome/browser/ui/views/frame/browser_view.h"
++#include "ui/gfx/geometry/rect.h"
++#include "ui/views/widget/widget.h"
++
++AetherWindowControlsHandler::AetherWindowControlsHandler(
++    mojo::PendingReceiver<aether::mojom::WindowControls> receiver,
++    Browser* browser)
++    : receiver_(this, std::move(receiver)),
++      browser_(browser) {
++  DCHECK(browser_);
++  views::Widget* widget = GetWidget();
++  if (widget) {
++    widget_ = widget;
++    widget_->AddObserver(this);
++    last_maximized_state_ = widget_->IsMaximized();
++  }
++}
++
++AetherWindowControlsHandler::~AetherWindowControlsHandler() {
++  if (widget_) {
++    widget_->RemoveObserver(this);
++  }
++}
++
++void AetherWindowControlsHandler::Minimize() {
++  views::Widget* widget = GetWidget();
++  if (widget) {
++    widget->Minimize();
++  }
++}
++
++void AetherWindowControlsHandler::Maximize() {
++  views::Widget* widget = GetWidget();
++  if (widget) {
++    widget->Maximize();
++  }
++}
++
++void AetherWindowControlsHandler::Restore() {
++  views::Widget* widget = GetWidget();
++  if (widget) {
++    widget->Restore();
++  }
++}
++
++void AetherWindowControlsHandler::Close() {
++  // Respect Normal Browser close path (respects unload handlers, unsaved changes, etc.)
++  chrome::CloseWindow(browser_);
++}
++
++void AetherWindowControlsHandler::IsMaximized(IsMaximizedCallback callback) {
++  views::Widget* widget = GetWidget();
++  std::move(callback).Run(widget ? widget->IsMaximized() : false);
++}
++
++void AetherWindowControlsHandler::AddObserver(
++    mojo::PendingRemote<aether::mojom::WindowControlsObserver> observer) {
++  observers_.Add(std::move(observer));
++}
++
++void AetherWindowControlsHandler::OnWidgetBoundsChanged(
++    views::Widget* widget,
++    const gfx::Rect& new_bounds) {
++  DCHECK_EQ(widget, widget_);
++  bool is_maximized = widget->IsMaximized();
++  if (is_maximized != last_maximized_state_) {
++    last_maximized_state_ = is_maximized;
++    for (auto& observer : observers_) {
++      observer->OnMaximizedStateChanged(is_maximized);
++    }
++  }
++}
++
++void AetherWindowControlsHandler::OnWidgetDestroying(views::Widget* widget) {
++  DCHECK_EQ(widget, widget_);
++  widget_->RemoveObserver(this);
++  widget_ = nullptr;
++}
++
++views::Widget* AetherWindowControlsHandler::GetWidget() const {
++  if (!browser_ || !browser_->window()) {
++    return nullptr;
++  }
++  BrowserView* browser_view = BrowserView::GetBrowserViewForBrowser(browser_);
++  return browser_view ? browser_view->GetWidget() : nullptr;
++}
++-- 
++2.54.0

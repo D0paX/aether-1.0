@@ -1,0 +1,36 @@
+// Aether Browser — Window Management Mojo Interface
+// Defines the contract between the Aether chrome WebUI (TypeScript) and the
+// browser process (C++) for window management. Bindings for both languages
+// are generated automatically by the Chromium mojom bindings generator.
+
+module aether.mojom;
+
+// Browser-side interface for window management actions initiated from
+// the Aether chrome WebUI.
+interface WindowControls {
+  // Minimizes the browser window.
+  Minimize();
+
+  // Maximizes the browser window.
+  Maximize();
+
+  // Restores the browser window from maximized state.
+  Restore();
+
+  // Closes the browser window.
+  Close();
+
+  // Returns whether the window is currently maximized.
+  IsMaximized() => (bool is_maximized);
+
+  // Registers an observer to be notified of maximize state changes.
+  AddObserver(pending_remote<WindowControlsObserver> observer);
+};
+
+// WebUI-side interface for receiving window state change notifications.
+interface WindowControlsObserver {
+  // Called when the window's maximized state changes, whether due to
+  // user action via the WebUI controls or external causes (OS snap,
+  // double-click on native frame edge, etc).
+  OnMaximizedStateChanged(bool is_maximized);
+};
