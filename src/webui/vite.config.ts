@@ -12,12 +12,18 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@": path.resolve(__dirname, "./src"),
+        ...(mode === "development" ? {
+          "/window_controls.mojom-webui.js": path.resolve(__dirname, "./src/chrome/services/stubs/window_controls.mojom-webui.ts"),
+        } : {}),
       },
     },
     build: {
       outDir: "dist",
       sourcemap: true,
       rollupOptions: {
+        external: [
+          "/window_controls.mojom-webui.js",
+        ],
         output: {
           entryFileNames: "assets/[name].js",
           chunkFileNames: "assets/[name].js",

@@ -12,7 +12,8 @@
     "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "/window_controls.mojom-webui.js": ["./src/chrome/services/stubs/window_controls.mojom-webui.ts"]
     }
   },
   "include": ["src"]

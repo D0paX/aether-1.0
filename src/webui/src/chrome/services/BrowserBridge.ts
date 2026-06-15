@@ -17,4 +17,12 @@ export interface AppInfo {
  */
 export interface BrowserBridge {
   getAppInfo(): Promise<AppInfo>;
+  windowControls: {
+    minimize(): Promise<void>;
+    maximize(): Promise<void>;
+    restore(): Promise<void>;
+    close(): Promise<void>;
+    isMaximized(): Promise<boolean>;
+    onMaximizedStateChanged(callback: (isMaximized: boolean) => void): () => void;
+  };
 }

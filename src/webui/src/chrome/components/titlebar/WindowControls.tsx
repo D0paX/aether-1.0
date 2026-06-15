@@ -1,27 +1,30 @@
 import React from "react";
 import { motion } from "motion/react";
-import { Minus, Square, X } from "lucide-react";
+import { Minus, Square, Copy, X } from "lucide-react";
+import { browserBridge } from "../../services";
+import { useWindowMaximizedState } from "../../hooks/useWindowMaximizedState";
 
 /**
  * Window controls component rendering Windows-convention custom-styled
  * minimize, maximize, and close buttons on the right side of the TitleBar.
  */
 export default function WindowControls(): React.JSX.Element {
-  // Handlers for window actions. Will interface with the Mojo IPC window management interface in Batch 07.
+  const isMaximized = useWindowMaximizedState();
+
   const handleMinimize = (): void => {
-    console.log(
-      "[WindowControls] minimize — requires window management Mojo interface, see batch-07",
-    );
+    browserBridge.windowControls.minimize();
   };
 
-  const handleMaximize = (): void => {
-    console.log(
-      "[WindowControls] maximize — requires window management Mojo interface, see batch-07",
-    );
+  const handleMaximizeToggle = (): void => {
+    if (isMaximized) {
+      browserBridge.windowControls.restore();
+    } else {
+      browserBridge.windowControls.maximize();
+    }
   };
 
   const handleClose = (): void => {
-    console.log("[WindowControls] close — requires window management Mojo interface, see batch-07");
+    browserBridge.windowControls.close();
   };
 
   return (
@@ -39,17 +42,17 @@ export default function WindowControls(): React.JSX.Element {
         <Minus size={14} />
       </motion.button>
 
-      {/* Maximize Button */}
+      {/* Maximize / Restore Button */}
       <motion.button
         className="window-control-btn"
-        onClick={handleMaximize}
+        onClick={handleMaximizeToggle}
         whileHover={{
           backgroundColor: "var(--color-hover-overlay)",
           color: "var(--color-text-primary)",
         }}
         transition={{ duration: 0.12 }}
       >
-        <Square size={14} />
+        {isMaximized ? <Copy size={14} /> : <Square size={14} />}
       </motion.button>
 
       {/* Close Button */}
