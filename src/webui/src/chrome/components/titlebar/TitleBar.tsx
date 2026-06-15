@@ -13,9 +13,9 @@ export function TitleBar(): React.JSX.Element {
 
   const handleDoubleClick = (): void => {
     if (isMaximized) {
-      browserBridge.windowControls.restore();
+      void browserBridge.windowControls.restore();
     } else {
-      browserBridge.windowControls.maximize();
+      void browserBridge.windowControls.maximize();
     }
   };
 

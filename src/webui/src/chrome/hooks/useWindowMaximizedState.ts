@@ -10,7 +10,7 @@ export function useWindowMaximizedState(): boolean {
 
   useEffect(() => {
     // Query initial state
-    browserBridge.windowControls.isMaximized().then(setIsMaximized);
+    void browserBridge.windowControls.isMaximized().then(setIsMaximized);
 
     // Subscribe to state changes (Minimize/Maximize/Restore/externals)
     const unsubscribe = browserBridge.windowControls.onMaximizedStateChanged(

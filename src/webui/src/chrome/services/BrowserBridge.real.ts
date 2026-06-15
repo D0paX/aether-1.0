@@ -14,7 +14,7 @@ export class RealBrowserBridge implements BrowserBridge {
 
   constructor() {
     // Pass the observer callback router remote end to C++ side
-    this.windowControlsRemote.addObserver(
+    void this.windowControlsRemote.addObserver(
       this.callbackRouter.$.bindNewPipeAndPassRemote()
     );
 

@@ -12,19 +12,19 @@ export default function WindowControls(): React.JSX.Element {
   const isMaximized = useWindowMaximizedState();
 
   const handleMinimize = (): void => {
-    browserBridge.windowControls.minimize();
+    void browserBridge.windowControls.minimize();
   };
 
   const handleMaximizeToggle = (): void => {
     if (isMaximized) {
-      browserBridge.windowControls.restore();
+      void browserBridge.windowControls.restore();
     } else {
-      browserBridge.windowControls.maximize();
+      void browserBridge.windowControls.maximize();
     }
   };
 
   const handleClose = (): void => {
-    browserBridge.windowControls.close();
+    void browserBridge.windowControls.close();
   };
 
   return (

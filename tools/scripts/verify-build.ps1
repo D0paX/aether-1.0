@@ -33,15 +33,15 @@ $script:passed = 0
 $script:failed = 0
 $total = 4
 
-function Print-Pass($name, $details) {
+function PrintPass($name, $details) {
     Write-Host "[PASS] " -ForegroundColor Green -NoNewline
-    Write-Host "$name: $details"
+    Write-Host "$($name): $details"
     $script:passed++
 }
 
-function Print-Fail($name, $details) {
+function PrintFail($name, $details) {
     Write-Host "[FAIL] " -ForegroundColor Red -NoNewline
-    Write-Host "$name: $details"
+    Write-Host "$($name): $details"
     $script:failed++
 }
 
@@ -71,9 +71,9 @@ Write-Host ""
 # ─────────────────────────────────────────────────
 
 if ($exePath -and (Test-Path $exePath)) {
-    Print-Pass "Executable exists" $exePath
+    PrintPass "Executable exists" $exePath
 } else {
-    Print-Fail "Executable exists" "Neither aether.exe nor chrome.exe found in $outDir"
+    PrintFail "Executable exists" "Neither aether.exe nor chrome.exe found in $outDir"
     # Remaining checks cannot proceed without the executable
     Write-Host ""
     Write-Host "==================================================" -ForegroundColor Cyan
@@ -93,9 +93,9 @@ $fileInfo = Get-Item $exePath
 $sizeMB = [math]::Round($fileInfo.Length / 1MB, 2)
 
 if ($sizeMB -gt 10) {
-    Print-Pass "Executable size" "$sizeMB MB (above 10 MB minimum)"
+    PrintPass "Executable size" "$sizeMB MB (above 10 MB minimum)"
 } else {
-    Print-Fail "Executable size" "$sizeMB MB (below 10 MB minimum — build may be incomplete)"
+    PrintFail "Executable size" "$sizeMB MB (below 10 MB minimum — build may be incomplete)"
 }
 
 # ─────────────────────────────────────────────────
@@ -119,7 +119,7 @@ try {
         -PassThru
 
     if (-not $process -or $process.HasExited) {
-        Print-Fail "Launch stability" "Process failed to start or exited immediately"
+        PrintFail "Launch stability" "Process failed to start or exited immediately"
     } else {
         # Wait 5 seconds and check if the process is still alive
         Start-Sleep -Seconds 5
@@ -127,7 +127,7 @@ try {
         $process.Refresh()
 
         if (-not $process.HasExited) {
-            Print-Pass "Launch stability" "Process running after 5 seconds (PID: $($process.Id))"
+            PrintPass "Launch stability" "Process running after 5 seconds (PID: $($process.Id))"
 
             # Kill the test process and its child processes
             try {
@@ -143,11 +143,11 @@ try {
             }
         } else {
             $exitCode = $process.ExitCode
-            Print-Fail "Launch stability" "Process crashed within 5 seconds (exit code: $exitCode)"
+            PrintFail "Launch stability" "Process crashed within 5 seconds (exit code: $exitCode)"
         }
     }
 } catch {
-    Print-Fail "Launch stability" "Exception during launch test: $_"
+    PrintFail "Launch stability" "Exception during launch test: $_"
 } finally {
     # Clean up test profile directory
     if (Test-Path $testProfileDir) {
@@ -179,12 +179,12 @@ foreach ($file in $keyFiles) {
 }
 
 if ($foundCount -eq $keyFiles.Count) {
-    Print-Pass "Key build artifacts" "All $foundCount expected files present ($($keyFiles -join ', '))"
+    PrintPass "Key build artifacts" "All $foundCount expected files present ($($keyFiles -join ', '))"
 } elseif ($foundCount -gt 0) {
     # Some files present — component build may have different naming
-    Print-Pass "Key build artifacts" "$foundCount of $($keyFiles.Count) found (missing: $($missingFiles -join ', ') — may be normal for this build configuration)"
+    PrintPass "Key build artifacts" "$foundCount of $($keyFiles.Count) found (missing: $($missingFiles -join ', ') — may be normal for this build configuration)"
 } else {
-    Print-Fail "Key build artifacts" "None of the expected files found: $($keyFiles -join ', ')"
+    PrintFail "Key build artifacts" "None of the expected files found: $($keyFiles -join ', ')"
 }
 
 # ─────────────────────────────────────────────────

@@ -1,13 +1,13 @@
 import React from "react";
 import { useTheme } from "./chrome/hooks/useTheme";
-import AppShell from "./chrome/components/AppShell";
+import AppLayout from "./chrome/components/layout/AppLayout";
 
 /**
  * Root application component.
- * Mounts the core layout grid container AppShell.
+ * Mounts the core layout container AppLayout.
  */
 export default function App(): React.JSX.Element {
   useTheme();
 
-  return <AppShell />;
+  return <AppLayout />;
 }

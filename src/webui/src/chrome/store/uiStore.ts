@@ -8,6 +8,7 @@ export interface UIState {
   sidebarActivePanel: SidebarPanel | null;
   theme: Theme;
   commandPaletteOpen: boolean;
+  bookmarksBarVisible: boolean;
 }
 
 export interface UIActions {
@@ -16,6 +17,7 @@ export interface UIActions {
   setTheme: (theme: Theme) => void;
   toggleCommandPalette: () => void;
   closeCommandPalette: () => void;
+  toggleBookmarksBar: () => void;
 }
 
 export type UIStore = UIState & UIActions;
@@ -27,6 +29,7 @@ export const useUIStore = createAetherStore<UIStore>(
     sidebarActivePanel: null,
     theme: "system",
     commandPaletteOpen: false,
+    bookmarksBarVisible: false,
 
     // Actions
     toggleSidebar: () =>
@@ -52,6 +55,13 @@ export const useUIStore = createAetherStore<UIStore>(
       ),
 
     closeCommandPalette: () => set({ commandPaletteOpen: false }, false, "ui/closeCommandPalette"),
+
+    toggleBookmarksBar: () =>
+      set(
+        (state) => ({ bookmarksBarVisible: !state.bookmarksBarVisible }),
+        false,
+        "ui/toggleBookmarksBar",
+      ),
   }),
   "ui-store",
 );
