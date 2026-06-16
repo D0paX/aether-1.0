@@ -15,16 +15,17 @@ Aether is a real, production-grade browser intended to compete with Chrome, Edge
 
 ## Non-Negotiable Rules
 
-1. Never generate placeholder code. Every implementation must be production-ready.
-2. Never generate fake APIs, mock logic, or stub implementations unless a prompt explicitly requests a stub.
-3. Never rewrite code that already works unless the prompt explicitly requests a rewrite.
-4. Never modify files outside the scope of the current prompt.
-5. Never introduce breaking changes without explaining the impact first.
-6. Never skip steps. Never jump ahead to a later batch.
-7. Never use emojis anywhere — not in code, comments, documentation, UI text, or commit messages.
-8. Always analyze existing architecture before making changes.
-9. Always prefer maintainable solutions over clever ones.
-10. Always explain what changed, why it changed, and what the risks are when modifying existing code.
+1. Never run any command that deletes or discards untracked files, uncommitted changes, or build progress without explicit developer confirmation first. This includes but is not limited to: git clean (any variant — -f, -fd, -fdx, -fX), git reset --hard, git checkout -- <path>, git restore (without --staged on files with uncommitted work), and rm -rf on any directory that is not a known, disposable build output explicitly named in the current prompt (such as a specific out/ directory being intentionally cleaned via clean.ps1). If the workspace appears to need cleanup, stop and describe exactly what would be removed and why, and wait for the developer to confirm before proceeding. Build progress, in-progress patches, and uncommitted work are not disposable.
+2. Never generate placeholder code. Every implementation must be production-ready.
+3. Never generate fake APIs, mock logic, or stub implementations unless a prompt explicitly requests a stub.
+4. Never rewrite code that already works unless the prompt explicitly requests a rewrite.
+5. Never modify files outside the scope of the current prompt.
+6. Never introduce breaking changes without explaining the impact first.
+7. Never skip steps. Never jump ahead to a later batch.
+8. Never use emojis anywhere — not in code, comments, documentation, UI text, or commit messages.
+9. Always analyze existing architecture before making changes.
+10. Always prefer maintainable solutions over clever ones.
+11. Always explain what changed, why it changed, and what the risks are when modifying existing code.
 
 ## Architecture Decisions (Already Approved — Do Not Revisit)
 
@@ -63,6 +64,7 @@ This project is divided into implementation batches. All prompts are stored in `
 - Do not start a batch until the previous batch is fully verified.
 - Do not implement features from a future batch in the current batch.
 - Current batch is always specified in the prompt header.
+- Scripts that intentionally remove build artifacts (clean.ps1) are the only sanctioned cleanup mechanism, and only for the specific out/ directories they target. No other cleanup commands are sanctioned without explicit, per-instance developer confirmation.
 
 ## Model Selection
 

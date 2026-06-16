@@ -33,6 +33,17 @@ Minimum hardware:
 3. Follow `docs/development/BRAVE_FORK_GUIDE.md` to initialize the Brave fork.
 4. Read `docs/architecture/OVERVIEW.md` for the system architecture.
 
+## Development Guides
+
+| Guide | Description |
+|-------|-------------|
+| `docs/development/SETUP_WINDOWS.md` | Windows build environment setup |
+| `docs/development/BRAVE_FORK_GUIDE.md` | Brave fork initialization and first build |
+| `docs/development/FIRST_BUILD_CHECKLIST.md` | Step-by-step first build checklist |
+| `docs/development/BUILD_GUIDE.md` | Build commands and configuration reference |
+| `docs/development/TROUBLESHOOTING.md` | Common build issues and solutions |
+| `docs/development/WEBUI_DEVELOPMENT.md` | WebUI development (available in Batch 06) |
+
 ## Repository Structure
 
 - `.aether/` — Implementation prompt batches, architectural decisions, and custom tools.

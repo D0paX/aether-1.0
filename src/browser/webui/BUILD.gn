@@ -1,0 +1,34 @@
+import("//tools/grit/grit_rule.gni")
+
+# Generate grit resources from the .grd mapping
+grit("aether_webui_test_resources") {
+  source = "resources/aether_webui_test_resources.grd"
+  outputs = [
+    "grit/aether_webui_test_resources.h",
+    "grit/aether_webui_test_resources_map.cc",
+    "grit/aether_webui_test_resources_map.h",
+    "aether_webui_test_resources.pak",
+  ]
+  output_dir = "$root_gen_dir/chrome"
+}
+
+# Native C++ WebUI controller target
+source_set("aether_webui_test") {
+  sources = [
+    "aether_webui_test_ui.cc",
+    "aether_webui_test_ui.h",
+    "aether_chrome_ui.cc",
+    "aether_chrome_ui.h",
+    "handlers/aether_window_controls_handler.cc",
+    "handlers/aether_window_controls_handler.h",
+  ]
+
+  deps = [
+    ":aether_webui_test_resources",
+    "//base",
+    "//content/public/browser",
+    "//aether/src/browser/webui/mojom:aether_window_controls",
+    "//chrome/browser/ui",
+    "//ui/views",
+  ]
+}

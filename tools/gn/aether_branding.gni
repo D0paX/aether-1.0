@@ -1,0 +1,36 @@
+# Aether Browser — GN Branding Configuration
+# This file is imported by aether_args.gn and defines branding variables
+# used throughout the Chromium build system.
+
+# The branding subdirectory name used for source paths and config resources.
+branding_path_component = "aether"
+
+# The user-visible product name of the browser.
+aether_product_name = "Aether"
+
+# The official name of the company or organization publishing the browser.
+aether_company_name = "Aether Browser"
+
+# The name of the main executable binary (excluding file extension).
+aether_exe_name = "aether"
+
+# The bundle identifier for macOS applications and helper processes.
+aether_mac_bundle_id = "com.aether.browser"
+
+# The release/update channel (empty for default/stable).
+aether_update_channel = ""
+
+# The major version number of the browser release.
+aether_version_major = "1"
+
+# The minor version number of the browser release.
+aether_version_minor = "0"
+
+# The build version number of the browser release.
+aether_version_build = "0"
+
+# The patch version number of the browser release.
+aether_version_patch = "0"
+
+# The full combined version string formatted as major.minor.build.patch.
+aether_version_string = "1.0.0.0"

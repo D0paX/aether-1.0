@@ -1,0 +1,7 @@
+feat(webui): wire window controls to real Mojo interface
+
+Checkpoint commit. WindowControls.tsx now calls real window management via
+BrowserBridge -> Mojo (window_controls.mojom from Batch 07). Mock
+implementation provides equivalent behavior for standalone dev server.
+Maximize/restore icon toggling and double-click-to-maximize verified via
+chrome://aether-chrome/.

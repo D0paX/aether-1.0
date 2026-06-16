@@ -1,0 +1,44 @@
+diff --git a/src/browser/webui/aether_chrome_ui.cc b/src/browser/webui/aether_chrome_ui.cc
+index 7ea8152..77363d0 100644
+--- a/src/browser/webui/aether_chrome_ui.cc
++++ b/src/browser/webui/aether_chrome_ui.cc
+@@ -44,3 +44,13 @@ void AetherChromeUI::BindInterface(
+   window_controls_handler_ = std::make_unique<AetherWindowControlsHandler>(
+       std::move(receiver), browser);
+ }
++
++void AetherChromeUI::BindInterface(
++    mojo::PendingReceiver<aether::mojom::TabManager> receiver) {
++  Browser* browser = chrome::FindBrowserWithWebContents(web_ui()->GetWebContents());
++  if (!tab_manager_handler_) {
++    tab_manager_handler_ = std::make_unique<AetherTabManagerHandler>(
++        browser, browser->tab_strip_model());
++  }
++  tab_manager_handler_->BindReceiver(std::move(receiver));
++}
+diff --git a/src/browser/webui/aether_chrome_ui.h b/src/browser/webui/aether_chrome_ui.h
+index 73094db..288618a 100644
+--- a/src/browser/webui/aether_chrome_ui.h
++++ b/src/browser/webui/aether_chrome_ui.h
+@@ -10,6 +10,8 @@
+ 
+ #include "chrome/browser/ui/webui/top_chrome/top_chrome_web_ui_controller.h"
+ #include "aether/src/browser/webui/mojom/window_controls.mojom.h"
++#include "aether/src/browser/webui/mojom/tab_manager.mojom.h"
++#include "aether/src/browser/webui/handlers/aether_tab_manager_handler.h"
+ #include "mojo/public/cpp/bindings/pending_receiver.h"
+ 
+ class AetherWindowControlsHandler;
+@@ -24,9 +26,12 @@ class AetherChromeUI : public TopChromeWebUIController {
+ 
+   void BindInterface(
+       mojo::PendingReceiver<aether::mojom::WindowControls> receiver);
++  void BindInterface(
++      mojo::PendingReceiver<aether::mojom::TabManager> receiver);
+ 
+  private:
+   std::unique_ptr<AetherWindowControlsHandler> window_controls_handler_;
++  std::unique_ptr<AetherTabManagerHandler> tab_manager_handler_;
+ };
+ 
+ #endif  // BROWSER_WEBUI_AETHER_CHROME_UI_H_

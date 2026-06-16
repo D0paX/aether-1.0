@@ -1,0 +1,51 @@
+.app-shell-container {
+  display: grid;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  grid-template-areas:
+    "titlebar titlebar"
+    "tabbar   tabbar"
+    "toolbar  toolbar"
+    "sidebar  viewport"
+    "statusbar statusbar";
+  grid-template-rows:
+    var(--height-titlebar)
+    var(--height-tabbar)
+    var(--height-toolbar)
+    1fr
+    var(--height-statusbar);
+  grid-template-columns: var(--width-sidebar) 1fr;
+  transition: grid-template-columns var(--duration-base) var(--ease-standard);
+}
+
+.app-shell-container.sidebar-collapsed {
+  grid-template-columns: var(--width-sidebar-collapsed) 1fr;
+}
+
+.area-titlebar {
+  grid-area: titlebar;
+  z-index: var(--z-dropdown);
+}
+
+.area-tabbar {
+  grid-area: tabbar;
+}
+
+.area-toolbar {
+  grid-area: toolbar;
+}
+
+.area-sidebar {
+  grid-area: sidebar;
+  overflow: hidden;
+}
+
+.area-viewport {
+  grid-area: viewport;
+  overflow: hidden;
+}
+
+.area-statusbar {
+  grid-area: statusbar;
+}

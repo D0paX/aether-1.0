@@ -1,0 +1,78 @@
+From: Aether Team <dev@aetherbrowser.org>
+Date: Sat, 31 May 2026 00:00:00 +0000
+Subject: [PATCH 0001] feat(identity): rename Brave to Aether in product branding
+
+Renames all user-visible instances of "Brave" to "Aether" in the core
+branding and string resource files. This patch establishes Aether as a
+distinct product identity built on the Brave/Chromium foundation.
+
+Changes:
+- brave/app/theme/brave/BRANDING: company and product name constants
+- brave/app/brave_strings.grd: IDS_PRODUCT_NAME and related strings
+- brave/common/brave_channel_info.cc: internal channel product name
+
+IMPORTANT: This patch was generated from known Brave source structure.
+Run `git apply --check` after cloning Brave to verify context lines.
+If any hunk fails, regenerate from the live source using:
+  tools/scripts/generate-identity-patch.ps1
+
+---
+ brave/app/theme/brave/BRANDING       | 10 +++++-----
+ brave/app/brave_strings.grd          |  6 +++---
+ brave/common/brave_channel_info.cc   |  2 +-
+ 3 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/brave/app/theme/brave/BRANDING b/brave/app/theme/brave/BRANDING
+--- a/brave/app/theme/brave/BRANDING
++++ b/brave/app/theme/brave/BRANDING
+@@ -1,10 +1,10 @@
+-COMPANY_FULLNAME=Brave Software Inc.
+-COMPANY_SHORTNAME=BraveSoftware
+-PRODUCT_FULLNAME=Brave Browser
+-PRODUCT_SHORTNAME=Brave-Browser
+-PRODUCT_INSTALLER_FULLNAME=Brave
++COMPANY_FULLNAME=Aether
++COMPANY_SHORTNAME=Aether
++PRODUCT_FULLNAME=Aether Browser
++PRODUCT_SHORTNAME=Aether-Browser
++PRODUCT_INSTALLER_FULLNAME=Aether
+ BROWSER_APP_GENERIC_NAME=Web Browser
+-APP_SPECIFIC_CATALOG_NAME=BraveSoftware
++APP_SPECIFIC_CATALOG_NAME=Aether
+ HELPPAGENAME=help
+-PRODUCT_LOGO_32=brave/app/theme/brave/product_logo_32.png
+-PRODUCT_LOGO_16=brave/app/theme/brave/product_logo_16.png
++PRODUCT_LOGO_32=brave/app/theme/brave/product_logo_32.png
++PRODUCT_LOGO_16=brave/app/theme/brave/product_logo_16.png
+diff --git a/brave/app/brave_strings.grd b/brave/app/brave_strings.grd
+--- a/brave/app/brave_strings.grd
++++ b/brave/app/brave_strings.grd
+@@ -7,11 +7,11 @@
+   <release seq="1">
+     <messages fallback_to_english="true">
+       <message name="IDS_PRODUCT_NAME" desc="The application name">
+-        Brave
++        Aether
+       </message>
+       <message name="IDS_SHORT_PRODUCT_NAME" desc="The application short name">
+-        Brave
++        Aether
+       </message>
+       <message name="IDS_PRODUCT_DESCRIPTION" desc="Browser description">
+-        The Brave browser is a fast, free, open source web browser.
++        Aether is a fast, privacy-focused web browser built for clarity.
+       </message>
+diff --git a/brave/common/brave_channel_info.cc b/brave/common/brave_channel_info.cc
+--- a/brave/common/brave_channel_info.cc
++++ b/brave/common/brave_channel_info.cc
+@@ -15,7 +15,7 @@
+ 
+ std::string GetChannelName() {
+ #if defined(OFFICIAL_BUILD)
+-  return "Brave";
++  return "Aether";
+ #else
+   return "Development";
+ #endif
+-- 
+2.54.0

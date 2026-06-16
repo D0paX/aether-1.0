@@ -1,0 +1,43 @@
+// Aether Browser - Tab Manager Mojo Interface
+// Exposes tab management to the Aether chrome WebUI.
+// Reference: chrome/browser/ui/webui/tab_search/tab_search.mojom
+
+module aether.mojom;
+
+struct AetherTab {
+  int32 id;
+  string title;
+  string url;
+  string favicon_url;
+  bool is_active;
+  bool is_pinned;
+  bool is_sleeping;
+  bool is_loading;
+  int32 group_id;
+};
+
+struct AetherTabGroup {
+  int32 id;
+  string title;
+  uint32 color;
+  bool is_collapsed;
+};
+
+interface TabManager {
+  GetAllTabs() => (array<AetherTab> tabs);
+  GetAllTabGroups() => (array<AetherTabGroup> groups);
+  CreateTab(string url) => (int32 new_tab_id);
+  CloseTab(int32 tab_id);
+  ActivateTab(int32 tab_id);
+  MoveTab(int32 tab_id, int32 new_index);
+  SetTabPinned(int32 tab_id, bool pinned);
+  DuplicateTab(int32 tab_id) => (int32 new_tab_id);
+  AddObserver(pending_remote<TabManagerObserver> observer);
+};
+
+interface TabManagerObserver {
+  OnTabsChanged(array<AetherTab> tabs);
+  OnTabUpdated(AetherTab tab);
+  OnActiveTabChanged(int32 tab_id);
+  OnTabGroupsChanged(array<AetherTabGroup> groups);
+};

@@ -1,0 +1,128 @@
+From: Aether Team <dev@aetherbrowser.org>
+Date: Sun, 14 Jun 2026 00:00:00 +0000
+Subject: [PATCH 0006] feat(updater): redirect Brave update and telemetry endpoints
+
+Replaces macOS Sparkle update feed URL with empty string,
+and updates network audit allowed list and HSTS generator configurations
+to use Aether placeholder domains instead of Brave endpoints.
+
+---
+ brave/browser/mac/sparkle_glue.mm                          | 12 ++----------
+ brave/browser/net/brave_network_audit_allowed_lists.h      | 12 ++++++------
+ .../transport_security_state_generator/input_file_parsers.cc | 12 ++++++------
+ 3 files changed, 14 insertions(+), 22 deletions(-)
+
+diff --git a/brave/browser/mac/sparkle_glue.mm b/brave/browser/mac/sparkle_glue.mm
+--- a/brave/browser/mac/sparkle_glue.mm
++++ b/brave/browser/mac/sparkle_glue.mm
+@@ -461,12 +461,4 @@
+ - (NSString*)feedURLStringForUpdater:(id)__unused updater {
+   auto* command = base::CommandLine::ForCurrentProcess();
+   if (command->HasSwitch(switches::kUpdateFeedURL)) {
+     return base::SysUTF8ToNSString(
+         command->GetSwitchValueASCII(switches::kUpdateFeedURL));
+   }
+ 
+-  return [NSString stringWithFormat:@"https://updates.bravesoftware.com/"
+-                                    @"sparkle/%@/%s/appcast.xml",
+-#if BUILDFLAG(IS_BRAVE_ORIGIN_BRANDED)
+-                                    @"Brave-Origin",
+-#else
+-                                    @"Brave-Browser",
+-#endif
+-                                    GetUpdateChannel().c_str()];
++  return @"";
+ }
+diff --git a/brave/browser/net/brave_network_audit_allowed_lists.h b/brave/browser/net/brave_network_audit_allowed_lists.h
+--- a/brave/browser/net/brave_network_audit_allowed_lists.h
++++ b/brave/browser/net/brave_network_audit_allowed_lists.h
+@@ -28,8 +28,8 @@ inline constexpr auto kAllowedUrlProtocols =
+ inline constexpr auto kAllowedUrlPrefixes = std::to_array<std::string_view>({
+     // allowed because it 307's to https://componentupdater.brave.com
+-    "https://componentupdater.brave.com/service/update2",
+-    "https://crxdownload.brave.com/crx/blobs/",
++    "https://componentupdater.aetherbrowser.com/service/update2",
++    "https://crxdownload.aetherbrowser.com/crx/blobs/",
+ 
+     // Omaha/Sparkle
+-    "https://updates.bravesoftware.com/",
++    "https://updates.aetherbrowser.com/",
+ 
+     // stats/referrals
+-    "https://usage-ping.brave.com/",
++    "https://usage-ping.aetherbrowser.com/",
+ 
+     // needed for DoH on Mac build machines
+@@ -66,2 +66,2 @@ inline constexpr auto kAllowedUrlPrefixes = std::to_array<std::string_view>({
+     // p3a
+-    "https://star-randsrv.bsg.brave.com/",
++    "https://star-randsrv.aetherbrowser.com/",
+ 
+     // Other
+@@ -70,3 +70,3 @@ inline constexpr auto kAllowedUrlPrefixes = std::to_array<std::string_view>({
+     "https://brave-core-ext.s3.brave.com/",
+     "https://dict.brave.com/",
+-    "https://go-updater.brave.com/",
++    "https://go-updater.aetherbrowser.com/",
+     "https://redirector.brave.com/",
+diff --git a/chromium_src/net/tools/transport_security_state_generator/input_file_parsers.cc b/chromium_src/net/tools/transport_security_state_generator/input_file_parsers.cc
+--- a/chromium_src/net/tools/transport_security_state_generator/input_file_parsers.cc
++++ b/chromium_src/net/tools/transport_security_state_generator/input_file_parsers.cc
+@@ -61,4 +61,4 @@ constexpr std::string_view kBravePinsJson = R"brave_pins_json({
+     { "name": "clients4.brave.com", "pins": "brave"},
+-    { "name": "componentupdater.brave.com", "pins": "brave"},
+-    { "name": "crxdownload.brave.com", "pins": "brave"},
++    { "name": "componentupdater.aetherbrowser.com", "pins": "brave"},
++    { "name": "crxdownload.aetherbrowser.com", "pins": "brave"},
+     { "name": "devtools.brave.com", "pins": "brave"},
+@@ -68,2 +68,2 @@ constexpr std::string_view kBravePinsJson = R"brave_pins_json({
+     { "name": "gaia.brave.com", "pins": "brave"},
+-    { "name": "go-updater.brave.com", "pins": "brave"},
++    { "name": "go-updater.aetherbrowser.com", "pins": "brave"},
+     { "name": "pcdn.brave.com", "pins": "brave"},
+@@ -85,4 +85,4 @@ constexpr std::string_view kBravePinsJson = R"brave_pins_json({
+     // P2A/P3A
+-    { "name": "collector.bsg.brave.com", "pins": "brave"},
+-    { "name": "star-randsrv.bsg.brave.com", "pins": "brave"},
++    { "name": "collector.aetherbrowser.com", "pins": "brave"},
++    { "name": "star-randsrv.aetherbrowser.com", "pins": "brave"},
+ 
+@@ -154,9 +154,9 @@ constexpr std::string_view kBraveHstsJson = R"brave_hsts_json({
+     {
+-      "name": "updates.bravesoftware.com",
++      "name": "updates.aetherbrowser.com",
+       "mode": "force-https",
+       "policy": "custom"
+     },
+     {
+-      "name": "updates-cdn.bravesoftware.com",
++      "name": "updates-cdn.aetherbrowser.com",
+       "mode": "force-https",
+       "policy": "custom"
+     },
+     {
+-      "name": "usage-ping.brave.com",
++      "name": "usage-ping.aetherbrowser.com",
+       "mode": "force-https",
+       "policy": "custom"
+     },
+@@ -196,8 +196,8 @@ constexpr std::string_view kBraveHstsJson = R"brave_hsts_json({
+     {
+-      "name": "componentupdater.brave.com",
++      "name": "componentupdater.aetherbrowser.com",
+       "mode": "force-https",
+       "policy": "custom"
+     },
+     {
+-      "name": "crxdownload.brave.com",
++      "name": "crxdownload.aetherbrowser.com",
+       "mode": "force-https",
+       "policy": "custom"
+     },
+@@ -231,3 +231,3 @@ constexpr std::string_view kBraveHstsJson = R"brave_hsts_json({
+     {
+-      "name": "go-updater.brave.com",
++      "name": "go-updater.aetherbrowser.com",
+       "mode": "force-https",
+-- 
+2.54.0

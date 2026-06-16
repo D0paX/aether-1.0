@@ -1,3 +1,15 @@
 # Aether Patch Series
 # Patches are applied in the order listed here, one per line.
-# Add patch filenames below this comment when patches are created in Batch 04.
+# Apply all patches with: tools/scripts/apply-patches.ps1
+
+0001-aether-identity.patch
+0004-remove-brave-telemetry.patch
+0005-remove-brave-update-service.patch
+0006-disable-brave-sync.patch
+0007-aether-sync-endpoints.patch
+0008-aether-webui-test-page.patch
+0009-aether-window-controls-handler.patch
+0010-aether-chrome-webui-controller.patch
+0011-aether-tab-manager-handler.patch
+0012-aether-chrome-ui-tab-wiring.patch
+0013-hide-native-tab-strip.patch
