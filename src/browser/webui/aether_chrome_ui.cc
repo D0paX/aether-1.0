@@ -44,3 +44,13 @@ void AetherChromeUI::BindInterface(
   window_controls_handler_ = std::make_unique<AetherWindowControlsHandler>(
       std::move(receiver), browser);
 }
+
+void AetherChromeUI::BindInterface(
+    mojo::PendingReceiver<aether::mojom::TabManager> receiver) {
+  Browser* browser = chrome::FindBrowserWithWebContents(web_ui()->GetWebContents());
+  if (!tab_manager_handler_) {
+    tab_manager_handler_ = std::make_unique<AetherTabManagerHandler>(
+        browser, browser->tab_strip_model());
+  }
+  tab_manager_handler_->BindReceiver(std::move(receiver));
+}

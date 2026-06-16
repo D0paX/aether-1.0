@@ -10,3 +10,5 @@
 0008-aether-webui-test-page.patch
 0009-aether-window-controls-handler.patch
 0010-aether-chrome-webui-controller.patch
+0011-aether-tab-manager-handler.patch
+0012-aether-chrome-ui-tab-wiring.patch
