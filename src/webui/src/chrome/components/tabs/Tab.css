@@ -1,0 +1,20 @@
+.aether-tab {
+  background: transparent;
+}
+
+.aether-tab:not(.aether-tab--active):hover {
+  background: var(--color-hover-overlay);
+}
+
+.aether-tab:hover .aether-tab-close,
+.aether-tab--active .aether-tab-close {
+  opacity: 1 !important;
+}
+
+.aether-tab-close {
+  background: transparent;
+}
+
+.aether-tab-close:hover {
+  background: var(--color-hover-overlay);
+}

@@ -1,5 +1,6 @@
 import React from "react";
 import { useTheme } from "./chrome/hooks/useTheme";
+import { useTabKeyboard } from "./chrome/hooks/useTabKeyboard";
 import AppLayout from "./chrome/components/layout/AppLayout";
 
 /**
@@ -8,6 +9,7 @@ import AppLayout from "./chrome/components/layout/AppLayout";
  */
 export default function App(): React.JSX.Element {
   useTheme();
+  useTabKeyboard();
 
   return <AppLayout />;
 }

@@ -14,6 +14,7 @@ export default defineConfig(({ mode }) => {
         "@": path.resolve(__dirname, "./src"),
         ...(mode === "development" ? {
           "/window_controls.mojom-webui.js": path.resolve(__dirname, "./src/chrome/services/stubs/window_controls.mojom-webui.ts"),
+          "/tab_manager.mojom-webui.js": path.resolve(__dirname, "./src/chrome/services/stubs/tab_manager.mojom-webui.ts"),
         } : {}),
       },
     },
@@ -23,6 +24,7 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         external: [
           "/window_controls.mojom-webui.js",
+          "/tab_manager.mojom-webui.js",
         ],
         output: {
           entryFileNames: "assets/[name].js",

@@ -2,6 +2,7 @@ import React from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useUIStore } from "../../store/uiStore";
 import TitleBar from "../titlebar/TitleBar";
+import { TabBar } from "../tabs/TabBar";
 import NavControlsPlaceholder from "../placeholders/NavControlsPlaceholder";
 import AddressBarPlaceholder from "../placeholders/AddressBarPlaceholder";
 import ToolbarActionsPlaceholder from "../placeholders/ToolbarActionsPlaceholder";
@@ -19,6 +20,7 @@ export default function AppLayout(): React.JSX.Element {
     <div className="app-layout">
       {/* 1. TitleBar */}
       <TitleBar />
+      <TabBar />
 
       {/* 2. ChromeToolbarRow */}
       <div className="chrome-toolbar-row">

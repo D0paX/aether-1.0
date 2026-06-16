@@ -13,7 +13,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "/window_controls.mojom-webui.js": ["./src/chrome/services/stubs/window_controls.mojom-webui.ts"]
+      "/window_controls.mojom-webui.js": ["./src/chrome/services/stubs/window_controls.mojom-webui.ts"],
+      "/tab_manager.mojom-webui.js": ["./src/chrome/services/stubs/tab_manager.mojom-webui.ts"]
     }
   },
   "include": ["src"]

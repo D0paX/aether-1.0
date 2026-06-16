@@ -1,3 +1,4 @@
+/* eslint-disable */
 export class WindowControlsRemote {
   public minimize(): Promise<void> {
     return Promise.resolve();

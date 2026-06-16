@@ -1,0 +1,23 @@
+feat(browser): establish top-chrome WebUI hosting and window management
+
+Completes Batch 07 — Browser Chrome Structure.
+
+Includes:
+- ADR-002: top-chrome WebUI hosting architecture, based on the existing
+  Tab Search / Side Panel hosting pattern in this codebase
+- window_controls.mojom: Mojo interface for minimize/maximize/restore/close
+  and maximize-state observation
+- AetherWindowControlsHandler: C++ implementation bridging to views::Widget
+- AetherChromeUI: persistent top-chrome WebUI controller, reachable at
+  chrome://aether-chrome/, hosted inside BrowserView per ADR-002
+- BrowserBridge.windowControls: first real (non-throwing) Mojo-backed
+  service implementation, with matching mock for standalone dev
+- WindowControls.tsx and TitleBar.tsx: real window management, maximize/
+  restore icon state, double-click-to-maximize
+- AppLayout: full chrome layout skeleton (toolbar row, bookmarks bar,
+  sidebar/viewport split, status bar) as labeled placeholders
+
+Native tab strip and toolbar remain in place and functional — replaced in
+Batch 08 alongside the TabBar that takes over their role.
+
+Proceed to Batch 08 (Browser Chrome — Tabs).

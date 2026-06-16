@@ -1,4 +1,5 @@
 import { BrowserBridge, AppInfo } from "./BrowserBridge";
+import { AetherTab, AetherTabGroup, TabsChangedCallback, TabUpdatedCallback, ActiveTabChangedCallback } from "../../shared/types/tabs";
 
 /*
 Mock implementations for standalone WebUI development (pnpm dev).
@@ -8,6 +9,22 @@ These are NEVER bundled into the production browser build — see vite.config.ts
 export class MockBrowserBridge implements BrowserBridge {
   private mockIsMaximized = false;
   private onMaximizedListeners = new Set<(isMaximized: boolean) => void>();
+
+  private mockTabs: AetherTab[] = [
+    { id: 1, title: "New Tab", url: "", faviconUrl: "", isActive: true,
+      isPinned: false, isSleeping: false, isLoading: false, groupId: -1 },
+    { id: 2, title: "GitHub", url: "https://github.com", faviconUrl: "",
+      isActive: false, isPinned: false, isSleeping: false, isLoading: false,
+      groupId: -1 },
+  ];
+  private mockNextId = 3;
+  private mockTabsCallbacks = new Set<TabsChangedCallback>();
+  private mockUpdatedCallbacks = new Set<TabUpdatedCallback>();
+  private mockActiveCallbacks = new Set<ActiveTabChangedCallback>();
+
+  private notifyTabsChanged(): void {
+    this.mockTabsCallbacks.forEach(cb => cb([...this.mockTabs]));
+  }
 
   public getAppInfo(): Promise<AppInfo> {
     return Promise.resolve({
@@ -52,4 +69,89 @@ export class MockBrowserBridge implements BrowserBridge {
   private notifyListeners(): void {
     this.onMaximizedListeners.forEach(listener => listener(this.mockIsMaximized));
   }
+
+  public tabs = {
+    getAllTabs: (): Promise<AetherTab[]> => {
+      return Promise.resolve([...this.mockTabs]);
+    },
+    getAllTabGroups: (): Promise<AetherTabGroup[]> => {
+      return Promise.resolve([]);
+    },
+    createTab: (url?: string): Promise<number> => {
+      const newId = this.mockNextId++;
+      const newTab: AetherTab = {
+        id: newId,
+        title: url ? url : "New Tab",
+        url: url || "",
+        faviconUrl: "",
+        isActive: false,
+        isPinned: false,
+        isSleeping: false,
+        isLoading: false,
+        groupId: -1
+      };
+      this.mockTabs.push(newTab);
+      void this.tabs.activateTab(newId);
+      return Promise.resolve(newId);
+    },
+    closeTab: (tabId: number): Promise<void> => {
+      const index = this.mockTabs.findIndex(t => t.id === tabId);
+      if (index === -1) return Promise.resolve();
+      
+      const wasActive = this.mockTabs[index]!.isActive;
+      this.mockTabs.splice(index, 1);
+      
+      if (wasActive && this.mockTabs.length > 0) {
+        void this.tabs.activateTab(this.mockTabs[this.mockTabs.length - 1]!.id);
+      } else {
+        this.notifyTabsChanged();
+      }
+      return Promise.resolve();
+    },
+    activateTab: (tabId: number): Promise<void> => {
+      this.mockTabs.forEach(t => {
+        t.isActive = (t.id === tabId);
+      });
+      this.notifyTabsChanged();
+      this.mockActiveCallbacks.forEach(cb => cb(tabId));
+      return Promise.resolve();
+    },
+    moveTab: (tabId: number, newIndex: number): Promise<void> => {
+      const index = this.mockTabs.findIndex(t => t.id === tabId);
+      if (index !== -1) {
+        const [tab] = this.mockTabs.splice(index, 1);
+        this.mockTabs.splice(newIndex, 0, tab!);
+        this.notifyTabsChanged();
+      }
+      return Promise.resolve();
+    },
+    setTabPinned: (tabId: number, pinned: boolean): Promise<void> => {
+      const tab = this.mockTabs.find(t => t.id === tabId);
+      if (tab) {
+        tab.isPinned = pinned;
+        this.notifyTabsChanged();
+        this.mockUpdatedCallbacks.forEach(cb => cb({...tab}));
+      }
+      return Promise.resolve();
+    },
+    duplicateTab: (tabId: number): Promise<number> => {
+      const tab = this.mockTabs.find(t => t.id === tabId);
+      if (tab) {
+        return this.tabs.createTab(tab.url);
+      }
+      return Promise.resolve(-1);
+    },
+    onTabsChanged: (cb: TabsChangedCallback) => {
+      this.mockTabsCallbacks.add(cb);
+      return () => this.mockTabsCallbacks.delete(cb);
+    },
+    onTabUpdated: (cb: TabUpdatedCallback) => {
+      this.mockUpdatedCallbacks.add(cb);
+      return () => this.mockUpdatedCallbacks.delete(cb);
+    },
+    onActiveTabChanged: (cb: ActiveTabChangedCallback) => {
+      this.mockActiveCallbacks.add(cb);
+      return () => this.mockActiveCallbacks.delete(cb);
+    }
+  };
 }
