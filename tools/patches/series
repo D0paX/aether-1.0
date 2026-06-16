@@ -12,3 +12,4 @@
 0010-aether-chrome-webui-controller.patch
 0011-aether-tab-manager-handler.patch
 0012-aether-chrome-ui-tab-wiring.patch
+0013-hide-native-tab-strip.patch

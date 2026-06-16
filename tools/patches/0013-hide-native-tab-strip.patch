@@ -1,0 +1,13 @@
+--- a/chrome/browser/ui/views/frame/browser_view.cc
++++ b/chrome/browser/ui/views/frame/browser_view.cc
+@@ -985,6 +985,10 @@
+       AddChildView(std::make_unique<HorizontalTabStripRegionView>(this));
+   horizontal_tab_strip_region_insertion_index_ =
+       GetIndexOf(horizontal_tab_strip_region_view_.get());
++
++  // Aether: native tab strip hidden. AetherChromeUI WebUI TabBar
++  // renders the tab strip UI. TabStripModel remains active.
++  horizontal_tab_strip_region_view_->SetVisible(false);
+ 
+   auto* const vertical_tab_strip_state_controller =
+       tabs::VerticalTabStripStateController::From(browser_);
