@@ -1,5 +1,5 @@
 import { AetherTab, AetherTabGroup, TabsChangedCallback, TabUpdatedCallback, ActiveTabChangedCallback, UnsubscribeFn } from "../../shared/types/tabs";
-
+import { NavigationState, NavigationStateCallback, LoadProgressCallback } from "../../shared/types/navigation";
 export interface AppInfo {
   version: string;
   platform: "windows" | "android";
@@ -39,5 +39,15 @@ export interface BrowserBridge {
     onTabsChanged(cb: TabsChangedCallback): UnsubscribeFn;
     onTabUpdated(cb: TabUpdatedCallback): UnsubscribeFn;
     onActiveTabChanged(cb: ActiveTabChangedCallback): UnsubscribeFn;
+  };
+  navigation: {
+    navigate(input: string): Promise<void>;
+    goBack(): Promise<void>;
+    goForward(): Promise<void>;
+    reload(): Promise<void>;
+    stop(): Promise<void>;
+    getNavigationState(): Promise<NavigationState>;
+    onNavigationStateChanged(cb: NavigationStateCallback): UnsubscribeFn;
+    onLoadProgressChanged(cb: LoadProgressCallback): UnsubscribeFn;
   };
 }

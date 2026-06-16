@@ -4,7 +4,7 @@ import { useUIStore } from "../../store/uiStore";
 import TitleBar from "../titlebar/TitleBar";
 import { TabBar } from "../tabs/TabBar";
 import NavControlsPlaceholder from "../placeholders/NavControlsPlaceholder";
-import AddressBarPlaceholder from "../placeholders/AddressBarPlaceholder";
+import AddressBar from "../addressbar/AddressBar";
 import ToolbarActionsPlaceholder from "../placeholders/ToolbarActionsPlaceholder";
 import BookmarksBarPlaceholder from "../placeholders/BookmarksBarPlaceholder";
 import SidebarPlaceholder from "../placeholders/SidebarPlaceholder";
@@ -28,7 +28,7 @@ export default function AppLayout(): React.JSX.Element {
           <NavControlsPlaceholder />
         </div>
         <div className="address-bar-region">
-          <AddressBarPlaceholder />
+          <AddressBar />
         </div>
         <div className="toolbar-actions-region">
           <ToolbarActionsPlaceholder />

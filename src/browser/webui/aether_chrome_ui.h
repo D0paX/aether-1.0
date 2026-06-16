@@ -11,7 +11,9 @@
 #include "chrome/browser/ui/webui/top_chrome/top_chrome_web_ui_controller.h"
 #include "aether/src/browser/webui/mojom/window_controls.mojom.h"
 #include "aether/src/browser/webui/mojom/tab_manager.mojom.h"
+#include "aether/src/browser/webui/mojom/navigation.mojom.h"
 #include "aether/src/browser/webui/handlers/aether_tab_manager_handler.h"
+#include "aether/src/browser/webui/handlers/aether_navigation_handler.h"
 #include "mojo/public/cpp/bindings/pending_receiver.h"
 
 class AetherWindowControlsHandler;
@@ -28,10 +30,13 @@ class AetherChromeUI : public TopChromeWebUIController {
       mojo::PendingReceiver<aether::mojom::WindowControls> receiver);
   void BindInterface(
       mojo::PendingReceiver<aether::mojom::TabManager> receiver);
+  void BindInterface(
+      mojo::PendingReceiver<aether::mojom::NavigationHandler> receiver);
 
  private:
   std::unique_ptr<AetherWindowControlsHandler> window_controls_handler_;
   std::unique_ptr<AetherTabManagerHandler> tab_manager_handler_;
+  std::unique_ptr<AetherNavigationHandler> navigation_handler_;
 };
 
 #endif  // BROWSER_WEBUI_AETHER_CHROME_UI_H_

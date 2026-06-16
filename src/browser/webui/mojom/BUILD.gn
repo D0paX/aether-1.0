@@ -26,3 +26,16 @@ mojom("aether_window_controls") {
 
   webui_module_path = "/"
 }
+
+mojom("aether_navigation_mojom") {
+  sources = [
+    "navigation.mojom",
+  ]
+
+  public_deps = [
+    "//mojo/public/mojom/base",
+    "//url/mojom:url_mojom_gurl",
+  ]
+
+  webui_module_path = "/"
+}

@@ -34,6 +34,10 @@ void CreateAndAddAetherChromeDataSource(Profile* profile) {
 AetherChromeUI::AetherChromeUI(content::WebUI* web_ui)
     : TopChromeWebUIController(web_ui) {
   CreateAndAddAetherChromeDataSource(Profile::FromWebUI(web_ui));
+  Browser* browser = chrome::FindBrowserWithWebContents(web_ui->GetWebContents());
+  if (browser) {
+    navigation_handler_ = std::make_unique<AetherNavigationHandler>(browser);
+  }
 }
 
 AetherChromeUI::~AetherChromeUI() = default;
@@ -54,3 +58,11 @@ void AetherChromeUI::BindInterface(
   }
   tab_manager_handler_->BindReceiver(std::move(receiver));
 }
+
+void AetherChromeUI::BindInterface(
+    mojo::PendingReceiver<aether::mojom::NavigationHandler> receiver) {
+  if (navigation_handler_) {
+    navigation_handler_->BindReceiver(std::move(receiver));
+  }
+}
+

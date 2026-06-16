@@ -1,0 +1,55 @@
+// Aether Browser - Navigation Handler Mojo Interface
+// Exposes browser navigation to the Aether chrome WebUI.
+
+module aether.mojom;
+
+enum SecurityLevel {
+  kNone = 0,
+  kWarning = 1,
+  kDangerous = 2,
+  kSecure = 3,
+  kSecureWithPolicyInstalledCert = 4,
+};
+
+struct NavigationState {
+  string url;
+  string display_url;
+  string title;
+  SecurityLevel security_level;
+  bool can_go_back;
+  bool can_go_forward;
+  bool is_loading;
+  double load_progress;
+};
+
+interface NavigationHandler {
+  // Navigate the active tab to the given URL or search query.
+  // If input is not a valid URL, it is treated as a search query.
+  Navigate(string input);
+
+  // Navigate back in history.
+  GoBack();
+
+  // Navigate forward in history.
+  GoForward();
+
+  // Reload the current page.
+  Reload();
+
+  // Stop loading.
+  Stop();
+
+  // Get current navigation state.
+  GetNavigationState() => (NavigationState state);
+
+  // Register an observer for navigation state changes.
+  AddObserver(pending_remote<NavigationObserver> observer);
+};
+
+interface NavigationObserver {
+  // Called when URL, title, security level, or loading state changes.
+  OnNavigationStateChanged(NavigationState state);
+
+  // Called during page load with progress 0.0 to 1.0.
+  OnLoadProgressChanged(double progress);
+};

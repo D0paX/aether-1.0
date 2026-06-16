@@ -13,3 +13,7 @@
 0011-aether-tab-manager-handler.patch
 0012-aether-chrome-ui-tab-wiring.patch
 0013-hide-native-tab-strip.patch
+0014-aether-navigation-handler.patch
+
+0015-aether-chrome-ui-navigation-wiring.patch
+

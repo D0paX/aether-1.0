@@ -1,5 +1,6 @@
 import { BrowserBridge, AppInfo } from "./BrowserBridge";
 import { AetherTab, AetherTabGroup, TabsChangedCallback, TabUpdatedCallback, ActiveTabChangedCallback } from "../../shared/types/tabs";
+import { NavigationState, NavigationStateCallback, LoadProgressCallback } from "../../shared/types/navigation";
 
 /*
 Mock implementations for standalone WebUI development (pnpm dev).
@@ -21,6 +22,23 @@ export class MockBrowserBridge implements BrowserBridge {
   private mockTabsCallbacks = new Set<TabsChangedCallback>();
   private mockUpdatedCallbacks = new Set<TabUpdatedCallback>();
   private mockActiveCallbacks = new Set<ActiveTabChangedCallback>();
+
+  private mockNavState: NavigationState = {
+    url: "chrome://newtab/",
+    displayUrl: "",
+    title: "New Tab",
+    securityLevel: "none",
+    canGoBack: false,
+    canGoForward: false,
+    isLoading: false,
+    loadProgress: 0,
+  };
+  private mockNavCallbacks = new Set<NavigationStateCallback>();
+  private mockLoadProgressCallbacks = new Set<LoadProgressCallback>();
+
+  private notifyNavChanged(): void {
+    this.mockNavCallbacks.forEach(cb => cb({ ...this.mockNavState }));
+  }
 
   private notifyTabsChanged(): void {
     this.mockTabsCallbacks.forEach(cb => cb([...this.mockTabs]));
@@ -152,6 +170,56 @@ export class MockBrowserBridge implements BrowserBridge {
     onActiveTabChanged: (cb: ActiveTabChangedCallback) => {
       this.mockActiveCallbacks.add(cb);
       return () => this.mockActiveCallbacks.delete(cb);
+    }
+  };
+
+  public navigation = {
+    navigate: (input: string): Promise<void> => {
+      if (input.includes(".")) {
+        this.mockNavState.url = input.startsWith("http") ? input : `https://${input}`;
+        this.mockNavState.displayUrl = input;
+        this.mockNavState.securityLevel = "secure";
+        this.mockNavState.title = input;
+      } else {
+        this.mockNavState.url = `https://www.google.com/search?q=${encodeURIComponent(input)}`;
+        this.mockNavState.displayUrl = "google.com";
+        this.mockNavState.securityLevel = "secure";
+        this.mockNavState.title = "Search: " + input;
+      }
+      this.mockNavState.canGoBack = true;
+      this.notifyNavChanged();
+      return Promise.resolve();
+    },
+    goBack: (): Promise<void> => {
+      this.mockNavState.canGoBack = false;
+      this.mockNavState.canGoForward = true;
+      this.notifyNavChanged();
+      return Promise.resolve();
+    },
+    goForward: (): Promise<void> => {
+      this.mockNavState.canGoForward = false;
+      this.mockNavState.canGoBack = true;
+      this.notifyNavChanged();
+      return Promise.resolve();
+    },
+    reload: (): Promise<void> => {
+      this.notifyNavChanged();
+      return Promise.resolve();
+    },
+    stop: (): Promise<void> => {
+      this.notifyNavChanged();
+      return Promise.resolve();
+    },
+    getNavigationState: (): Promise<NavigationState> => {
+      return Promise.resolve({ ...this.mockNavState });
+    },
+    onNavigationStateChanged: (cb: NavigationStateCallback) => {
+      this.mockNavCallbacks.add(cb);
+      return () => this.mockNavCallbacks.delete(cb);
+    },
+    onLoadProgressChanged: (cb: LoadProgressCallback) => {
+      this.mockLoadProgressCallbacks.add(cb);
+      return () => this.mockLoadProgressCallbacks.delete(cb);
     }
   };
 }
