@@ -1,0 +1,86 @@
+.statusbar-container {
+  height: 22px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 0 var(--space-3);
+  gap: var(--space-3);
+  background: var(--color-surface);
+  backdrop-filter: blur(var(--blur-sm));
+  -webkit-backdrop-filter: blur(var(--blur-sm));
+  border-top: 1px solid var(--color-border);
+}
+
+.statusbar-left {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+}
+
+.statusbar-loading-text {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.statusbar-center {
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.statusbar-security-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 9999px;
+  flex-shrink: 0;
+}
+
+.statusbar-security-dot.secure {
+  background: var(--color-success);
+}
+.statusbar-security-dot.warning {
+  background: var(--color-warning);
+}
+.statusbar-security-dot.dangerous {
+  background: var(--color-error);
+}
+
+.statusbar-security-text {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+.statusbar-security-text.secure {
+  color: var(--color-success);
+}
+.statusbar-security-text.warning {
+  color: var(--color-warning);
+}
+.statusbar-security-text.dangerous {
+  color: var(--color-error);
+}
+
+.statusbar-right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.statusbar-tab-count {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+}
+
+.statusbar-separator {
+  width: 1px;
+  height: 10px;
+  background: var(--color-border);
+}
+
+.statusbar-version {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+}

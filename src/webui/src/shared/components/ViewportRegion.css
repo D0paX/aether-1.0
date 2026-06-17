@@ -1,0 +1,9 @@
+.viewport-region-content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  color: var(--color-text-tertiary);
+  font-size: var(--font-size-lg);
+  font-family: var(--font-mono);
+}

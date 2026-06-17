@@ -23,21 +23,41 @@ export class MockBrowserBridge implements BrowserBridge {
   private mockUpdatedCallbacks = new Set<TabUpdatedCallback>();
   private mockActiveCallbacks = new Set<ActiveTabChangedCallback>();
 
-  private mockNavState: NavigationState = {
-    url: "chrome://newtab/",
-    displayUrl: "",
-    title: "New Tab",
-    securityLevel: "none",
-    canGoBack: false,
-    canGoForward: false,
-    isLoading: false,
-    loadProgress: 0,
+  private mockNavStates: Record<number, NavigationState> = {
+    1: {
+      url: "",
+      displayUrl: "",
+      title: "New Tab",
+      securityLevel: "none",
+      canGoBack: false,
+      canGoForward: false,
+      isLoading: false,
+      loadProgress: 0,
+    },
+    2: {
+      url: "https://github.com",
+      displayUrl: "github.com",
+      title: "GitHub",
+      securityLevel: "secure",
+      canGoBack: true,
+      canGoForward: false,
+      isLoading: false,
+      loadProgress: 0,
+    }
   };
   private mockNavCallbacks = new Set<NavigationStateCallback>();
   private mockLoadProgressCallbacks = new Set<LoadProgressCallback>();
 
+  private getActiveTabId(): number {
+    return this.mockTabs.find((t) => t.isActive)?.id ?? 1;
+  }
+
   private notifyNavChanged(): void {
-    this.mockNavCallbacks.forEach(cb => cb({ ...this.mockNavState }));
+    const activeId = this.getActiveTabId();
+    const state = this.mockNavStates[activeId];
+    if (state) {
+      this.mockNavCallbacks.forEach(cb => cb({ ...state }));
+    }
   }
 
   private notifyTabsChanged(): void {
@@ -108,6 +128,18 @@ export class MockBrowserBridge implements BrowserBridge {
         isLoading: false,
         groupId: -1
       };
+      
+      this.mockNavStates[newId] = {
+        url: url || "",
+        displayUrl: url ? url.replace("https://", "").replace("http://", "").replace("www.", "") : "",
+        title: url ? url : "New Tab",
+        securityLevel: url ? "secure" : "none",
+        canGoBack: false,
+        canGoForward: false,
+        isLoading: false,
+        loadProgress: 0,
+      };
+
       this.mockTabs.push(newTab);
       void this.tabs.activateTab(newId);
       return Promise.resolve(newId);
@@ -118,6 +150,7 @@ export class MockBrowserBridge implements BrowserBridge {
       
       const wasActive = this.mockTabs[index]!.isActive;
       this.mockTabs.splice(index, 1);
+      delete this.mockNavStates[tabId];
       
       if (wasActive && this.mockTabs.length > 0) {
         void this.tabs.activateTab(this.mockTabs[this.mockTabs.length - 1]!.id);
@@ -132,6 +165,7 @@ export class MockBrowserBridge implements BrowserBridge {
       });
       this.notifyTabsChanged();
       this.mockActiveCallbacks.forEach(cb => cb(tabId));
+      this.notifyNavChanged();
       return Promise.resolve();
     },
     moveTab: (tabId: number, newIndex: number): Promise<void> => {
@@ -175,31 +209,58 @@ export class MockBrowserBridge implements BrowserBridge {
 
   public navigation = {
     navigate: (input: string): Promise<void> => {
-      if (input.includes(".")) {
-        this.mockNavState.url = input.startsWith("http") ? input : `https://${input}`;
-        this.mockNavState.displayUrl = input;
-        this.mockNavState.securityLevel = "secure";
-        this.mockNavState.title = input;
+      const activeId = this.getActiveTabId();
+      const state = this.mockNavStates[activeId];
+      if (!state) return Promise.resolve();
+
+      let newUrl = "";
+      let displayUrl = "";
+      let title = "";
+
+      if (input.includes(".") && !input.includes(" ")) {
+        newUrl = input.startsWith("http") ? input : `https://${input}`;
+        displayUrl = newUrl.replace("https://", "").replace("http://", "").replace("www.", "");
+        title = displayUrl;
       } else {
-        this.mockNavState.url = `https://www.google.com/search?q=${encodeURIComponent(input)}`;
-        this.mockNavState.displayUrl = "google.com";
-        this.mockNavState.securityLevel = "secure";
-        this.mockNavState.title = "Search: " + input;
+        newUrl = `https://www.google.com/search?q=${encodeURIComponent(input)}`;
+        displayUrl = "google.com";
+        title = "Search: " + input;
       }
-      this.mockNavState.canGoBack = true;
+
+      state.url = newUrl;
+      state.displayUrl = displayUrl;
+      state.title = title;
+      state.securityLevel = "secure";
+      state.canGoBack = true;
+
+      const tab = this.mockTabs.find(t => t.id === activeId);
+      if (tab) {
+        tab.url = newUrl;
+        tab.title = title;
+        this.notifyTabsChanged();
+      }
+
       this.notifyNavChanged();
       return Promise.resolve();
     },
     goBack: (): Promise<void> => {
-      this.mockNavState.canGoBack = false;
-      this.mockNavState.canGoForward = true;
-      this.notifyNavChanged();
+      const activeId = this.getActiveTabId();
+      const state = this.mockNavStates[activeId];
+      if (state) {
+        state.canGoBack = false;
+        state.canGoForward = true;
+        this.notifyNavChanged();
+      }
       return Promise.resolve();
     },
     goForward: (): Promise<void> => {
-      this.mockNavState.canGoForward = false;
-      this.mockNavState.canGoBack = true;
-      this.notifyNavChanged();
+      const activeId = this.getActiveTabId();
+      const state = this.mockNavStates[activeId];
+      if (state) {
+        state.canGoForward = false;
+        state.canGoBack = true;
+        this.notifyNavChanged();
+      }
       return Promise.resolve();
     },
     reload: (): Promise<void> => {
@@ -211,7 +272,8 @@ export class MockBrowserBridge implements BrowserBridge {
       return Promise.resolve();
     },
     getNavigationState: (): Promise<NavigationState> => {
-      return Promise.resolve({ ...this.mockNavState });
+      const activeId = this.getActiveTabId();
+      return Promise.resolve({ ...this.mockNavStates[activeId]! });
     },
     onNavigationStateChanged: (cb: NavigationStateCallback) => {
       this.mockNavCallbacks.add(cb);

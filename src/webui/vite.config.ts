@@ -15,6 +15,7 @@ export default defineConfig(({ mode }) => {
         ...(mode === "development" ? {
           "/window_controls.mojom-webui.js": path.resolve(__dirname, "./src/chrome/services/stubs/window_controls.mojom-webui.ts"),
           "/tab_manager.mojom-webui.js": path.resolve(__dirname, "./src/chrome/services/stubs/tab_manager.mojom-webui.ts"),
+          "/navigation.mojom-webui.js": path.resolve(__dirname, "./src/chrome/services/stubs/navigation.mojom-webui.ts"),
         } : {}),
       },
     },
@@ -25,6 +26,7 @@ export default defineConfig(({ mode }) => {
         external: [
           "/window_controls.mojom-webui.js",
           "/tab_manager.mojom-webui.js",
+          "/navigation.mojom-webui.js",
         ],
         output: {
           entryFileNames: "assets/[name].js",

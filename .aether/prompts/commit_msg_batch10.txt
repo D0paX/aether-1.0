@@ -1,0 +1,21 @@
+feat(webui): complete browser chrome layout — toolbar and sidebar
+
+Completes Batch 10 — Toolbar and Sidebar.
+
+Includes:
+- NavControls: back/forward/reload/stop with animated icon swap
+- ToolbarActions: sidebar toggle (accent highlight when active),
+  downloads shortcut, settings placeholder
+- BookmarksBar: horizontal scroll, mock bookmarks, toggle via uiStore
+- Sidebar: framer-motion width animation, icon tab panel switcher,
+  default panel on open logic
+- SidebarHeader: four panel tabs (Bookmarks, History, Downloads, AI)
+- Panel shells with mock data — real data in Batch 13 and Batch 17
+- StatusBar: security indicator, tab count, version label
+- All placeholder components removed except ViewportRegion
+- toolbarButton.css shared button styles used by NavControls
+  and ToolbarActions
+
+Full browser chrome layout verified in standalone dev server.
+Every region is a real component. No placeholders remain in active use.
+Proceed to Batch 11 (New Tab Page).

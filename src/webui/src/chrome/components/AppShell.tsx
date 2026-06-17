@@ -5,7 +5,7 @@ import TabBarPlaceholder from "./tabs/TabBarPlaceholder";
 import ToolbarPlaceholder from "./toolbar/ToolbarPlaceholder";
 import SidebarPlaceholder from "./sidebar/SidebarPlaceholder";
 import StatusBarPlaceholder from "./statusbar/StatusBarPlaceholder";
-import ViewportPlaceholder from "../../shared/components/ViewportPlaceholder";
+import ViewportRegion from "../../shared/components/ViewportRegion";
 import "./AppShell.css";
 
 /**
@@ -31,7 +31,7 @@ export function AppShell(): React.JSX.Element {
         <SidebarPlaceholder />
       </div>
       <div className="area-viewport">
-        <ViewportPlaceholder />
+        <ViewportRegion />
       </div>
       <div className="area-statusbar">
         <StatusBarPlaceholder />
