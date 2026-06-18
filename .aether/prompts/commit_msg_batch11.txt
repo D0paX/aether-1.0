@@ -1,0 +1,17 @@
+feat(newtab): build Aether New Tab Page frontend
+
+Batch 11 frontend checkpoint. NTP is fully built as a separate
+Vite entry point and renders correctly in standalone dev.
+
+Includes:
+- Vite multi-entry config (chrome + newtab separate bundles)
+- NTPBackground: three animated gradient orbs (framer-motion)
+- Clock: live HH:MM:SS with date and time-of-day greeting
+- NTPSearchBar: pill-shaped, auto-focus, Enter navigates
+- SpeedDial: 12 default sites with spring hover animation
+- NewTabPage: composed layout with staggered entry animations
+- Dark mode verified via CSS custom properties throughout
+- useTheme moved to shared/hooks/ for use by both chrome and NTP
+
+C++ NTP registration follows in next prompts (P11-07 survey
+sent separately).

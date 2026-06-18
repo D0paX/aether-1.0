@@ -1,0 +1,14 @@
+/* Aether Browser — New Tab Page styles */
+/* Hides default browser scroll behavior on the NTP */
+html, body, #root {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
+}
+
+/* Remove default focus outline on NTP body */
+body:focus {
+  outline: none;
+}

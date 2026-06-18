@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useUIStore } from "../store/uiStore";
+import { useUIStore } from "../../chrome/store/uiStore";
 
 /**
  * Custom hook to monitor UI theme settings and apply the selected theme

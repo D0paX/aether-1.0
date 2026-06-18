@@ -1,0 +1,28 @@
+.ntp-clock-container {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+}
+
+.ntp-clock-time {
+  font-size: 72px;
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  letter-spacing: -3px;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+
+.ntp-clock-date {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  margin-top: var(--space-1);
+  font-weight: var(--font-weight-regular);
+}
+
+.ntp-clock-greeting {
+  font-size: var(--font-size-lg);
+  color: var(--color-text-primary);
+  font-weight: var(--font-weight-medium);
+  margin-top: var(--space-2);
+}

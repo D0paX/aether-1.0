@@ -14,11 +14,8 @@ export class MockBrowserBridge implements BrowserBridge {
   private mockTabs: AetherTab[] = [
     { id: 1, title: "New Tab", url: "", faviconUrl: "", isActive: true,
       isPinned: false, isSleeping: false, isLoading: false, groupId: -1 },
-    { id: 2, title: "GitHub", url: "https://github.com", faviconUrl: "",
-      isActive: false, isPinned: false, isSleeping: false, isLoading: false,
-      groupId: -1 },
   ];
-  private mockNextId = 3;
+  private mockNextId = 2;
   private mockTabsCallbacks = new Set<TabsChangedCallback>();
   private mockUpdatedCallbacks = new Set<TabUpdatedCallback>();
   private mockActiveCallbacks = new Set<ActiveTabChangedCallback>();
@@ -30,16 +27,6 @@ export class MockBrowserBridge implements BrowserBridge {
       title: "New Tab",
       securityLevel: "none",
       canGoBack: false,
-      canGoForward: false,
-      isLoading: false,
-      loadProgress: 0,
-    },
-    2: {
-      url: "https://github.com",
-      displayUrl: "github.com",
-      title: "GitHub",
-      securityLevel: "secure",
-      canGoBack: true,
       canGoForward: false,
       isLoading: false,
       loadProgress: 0,

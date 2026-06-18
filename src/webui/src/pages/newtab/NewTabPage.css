@@ -1,0 +1,25 @@
+.newtab-page {
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  background: var(--color-bg);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  position: relative;
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.ntp-content-stack {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+  width: 100%;
+  padding: var(--space-12) var(--space-6);
+}

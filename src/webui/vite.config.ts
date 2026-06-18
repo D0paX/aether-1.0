@@ -1,7 +1,7 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import { fileURLToPath } from "url";
-import path from "path";
+import path, { resolve } from "path";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -23,15 +23,19 @@ export default defineConfig(({ mode }) => {
       outDir: "dist",
       sourcemap: true,
       rollupOptions: {
+        input: {
+          chrome: resolve(__dirname, "index.html"),
+          newtab: resolve(__dirname, "newtab.html"),
+        },
         external: [
           "/window_controls.mojom-webui.js",
           "/tab_manager.mojom-webui.js",
           "/navigation.mojom-webui.js",
         ],
         output: {
-          entryFileNames: "assets/[name].js",
-          chunkFileNames: "assets/[name].js",
-          assetFileNames: "assets/[name].[ext]",
+          entryFileNames: "assets/[name]/[name].[hash].js",
+          chunkFileNames: "assets/shared/[name].[hash].js",
+          assetFileNames: "assets/[name].[hash][extname]",
         },
       },
     },

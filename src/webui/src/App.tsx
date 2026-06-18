@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { useTheme } from "./chrome/hooks/useTheme";
+import { useTheme } from "./shared/hooks/useTheme";
 import { useTabKeyboard } from "./chrome/hooks/useTabKeyboard";
 import { navigationStore } from "./chrome/store/navigationStore";
 import AppLayout from "./chrome/components/layout/AppLayout";
