@@ -151,8 +151,10 @@ Expected: prints gclient version information without errors.
 
 ```cmd
 set DEPOT_TOOLS_WIN_TOOLCHAIN=0
-set vs2022_install=C:\Program Files\Microsoft Visual Studio\2022\Community
+set vs2022_install=C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools
 ```
+
+> **Note:** Visual Studio Build Tools 2022 installs under `C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools` even though the MSVC toolset itself is 64-bit. Set `vs2022_install` to this (x86) path, not the 64-bit Program Files path.
 
 Add both environment variables permanently via System Properties > Environment Variables > System Variables.
 
