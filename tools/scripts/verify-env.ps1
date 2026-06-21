@@ -53,6 +53,8 @@ if ($os.Platform -eq "Win32NT" -and $os.Version.Major -eq 10 -and $build -ge 190
 }
 
 # 3. Visual Studio 2022 detection
+# Also checks Program Files (x86) for Build Tools edition, which installs
+# under the x86 path even though the MSVC toolset itself is 64-bit.
 $vsPath = $null
 $vswhere = "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe"
 if (Test-Path $vswhere) {
@@ -62,7 +64,9 @@ if (-not $vsPath) {
     $commonPaths = @(
         "C:\Program Files\Microsoft Visual Studio\2022\Community",
         "C:\Program Files\Microsoft Visual Studio\2022\Professional",
-        "C:\Program Files\Microsoft Visual Studio\2022\Enterprise"
+        "C:\Program Files\Microsoft Visual Studio\2022\Enterprise",
+        "C:\Program Files\Microsoft Visual Studio\2022\BuildTools",
+        "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools"
     )
     foreach ($path in $commonPaths) {
         if (Test-Path $path) {
@@ -163,32 +167,47 @@ if ($gitPass) {
 }
 
 # 7. Python check
-$pyCmd = Get-Command python -ErrorAction SilentlyContinue
+# depot_tools bundles its own python3 (python3.bat), which is what the
+# Chromium build actually uses. We check python3 first, then fall back
+# to bare python. The Windows Store stub for 'python' is not valid.
 $pyPass = $false
 $pyVer = "Not found"
+$pySource = ""
+$pyCmd = Get-Command python3 -ErrorAction SilentlyContinue
+if (-not $pyCmd) {
+    $pyCmd = Get-Command python -ErrorAction SilentlyContinue
+}
 if ($pyCmd) {
-    $pyOutput = python --version 2>&1
-    if ($pyOutput -match "Python (\d+\.\d+\.\d+)") {
-        $pyVer = $Matches[1]
-        $pyVerObj = [version]$pyVer
-        if ($pyVerObj -ge [version]"3.9.0" -and $pyVerObj -lt [version]"3.12.0") {
-            $pyPass = $true
+    $pySource = $pyCmd.Source
+    # Skip the Windows Store stub — it has no real Python behind it
+    if ($pySource -notlike "*WindowsApps*") {
+        $pyOutput = & $pyCmd.Name --version 2>&1
+        if ($pyOutput -match "Python (\d+\.\d+\.\d+)") {
+            $pyVer = $Matches[1]
+            $pyVerObj = [version]$pyVer
+            if ($pyVerObj -ge [version]"3.9.0" -and $pyVerObj -lt [version]"3.13.0") {
+                $pyPass = $true
+            }
         }
     }
 }
 if ($pyPass) {
-    Print-Pass "Python" "version $pyVer"
+    Print-Pass "Python" "version $pyVer ($pySource)"
 } else {
-    Print-Fail "Python" "version $pyVer (Requires version 3.9.x - 3.11.x)"
+    Print-Fail "Python" "version $pyVer (Requires python3 3.9.x - 3.12.x, or depot_tools bundled python3)"
 }
 
 # 8. Node.js check
+# Aether uses a dual-node strategy managed by nvm-windows:
+#   Node 24.x — brave-core sync/build commands (npm run init, gclient, etc.)
+#   Node 22.x — pnpm webui:* commands (WebUI dev/build)
+# Either version satisfies this check; both should be installed via nvm.
 $nodeCmd = Get-Command node -ErrorAction SilentlyContinue
 $nodePass = $false
 $nodeVer = "Not found"
 if ($nodeCmd) {
     $nodeOutput = node --version
-    if ($nodeOutput -match "v(20\.\d+\.\d+)") {
+    if ($nodeOutput -match "v(2[024]\.\d+\.\d+)") {
         $nodeVer = $Matches[1]
         $nodePass = $true
     } else {
@@ -198,7 +217,7 @@ if ($nodeCmd) {
 if ($nodePass) {
     Print-Pass "Node.js" "version $nodeVer"
 } else {
-    Print-Fail "Node.js" "version $nodeVer (Requires v20.x.x)"
+    Print-Fail "Node.js" "version $nodeVer (Requires v20.x.x, v22.x.x, or v24.x.x)"
 }
 
 # 9. pnpm check
@@ -221,10 +240,20 @@ if ($pnpmPass) {
 }
 
 # 10. depot_tools directory check
+# Accepts depot_tools at the standard C:\depot_tools location or vendored
+# inside the brave-browser checkout (which is what Brave's npm run init uses).
+$depotToolsPath = $null
 if (Test-Path "C:\depot_tools") {
-    Print-Pass "depot_tools Directory" "Found at C:\depot_tools"
+    $depotToolsPath = "C:\depot_tools"
+} elseif ($env:BRAVE_SRC -and (Test-Path "$env:BRAVE_SRC\src\brave\vendor\depot_tools")) {
+    $depotToolsPath = "$env:BRAVE_SRC\src\brave\vendor\depot_tools"
+} elseif (Test-Path "E:\src\brave-browser\src\brave\vendor\depot_tools") {
+    $depotToolsPath = "E:\src\brave-browser\src\brave\vendor\depot_tools"
+}
+if ($depotToolsPath) {
+    Print-Pass "depot_tools Directory" "Found at $depotToolsPath"
 } else {
-    Print-Fail "depot_tools Directory" "Missing at C:\depot_tools"
+    Print-Fail "depot_tools Directory" "Missing (checked C:\depot_tools and vendored path)"
 }
 
 # 11. depot_tools on PATH (gclient)
@@ -240,7 +269,15 @@ if ($gclientPass) {
 }
 
 # 12. DEPOT_TOOLS_WIN_TOOLCHAIN variable check
+# Check both Machine (HKLM) and User (HKCU) scopes, since this project
+# uses user-scoped variables when running in a non-elevated terminal.
 $toolchain = [Environment]::GetEnvironmentVariable("DEPOT_TOOLS_WIN_TOOLCHAIN", "Machine")
+if (-not $toolchain) {
+    $toolchain = [Environment]::GetEnvironmentVariable("DEPOT_TOOLS_WIN_TOOLCHAIN", "User")
+}
+if (-not $toolchain -and $env:DEPOT_TOOLS_WIN_TOOLCHAIN) {
+    $toolchain = $env:DEPOT_TOOLS_WIN_TOOLCHAIN
+}
 if ($toolchain -eq "0") {
     Print-Pass "DEPOT_TOOLS_WIN_TOOLCHAIN" "Configured to 0"
 } else {
@@ -248,7 +285,14 @@ if ($toolchain -eq "0") {
 }
 
 # 13. vs2022_install variable check
+# Check both Machine and User scopes, plus the active session.
 $vsInstallVar = [Environment]::GetEnvironmentVariable("vs2022_install", "Machine")
+if (-not $vsInstallVar) {
+    $vsInstallVar = [Environment]::GetEnvironmentVariable("vs2022_install", "User")
+}
+if (-not $vsInstallVar -and $env:vs2022_install) {
+    $vsInstallVar = $env:vs2022_install
+}
 $vsInstallPass = $false
 if ($vsInstallVar -and (Test-Path $vsInstallVar)) {
     $vsInstallPass = $true
@@ -260,35 +304,47 @@ if ($vsInstallPass) {
 }
 
 # 14. Available disk space check
+# If BRAVE_SRC is set, check free space on that drive (the actual build drive)
+# instead of hardcoding C:. The build tree and artifacts live on this drive.
 $targetDrive = "C:"
-if (Test-Path "C:\src") {
-    $targetDrive = [System.IO.Path]::GetPathRoot("C:\src")
+if ($env:BRAVE_SRC) {
+    $targetDrive = [System.IO.Path]::GetPathRoot($env:BRAVE_SRC)
+} elseif (Test-Path "E:\src") {
+    $targetDrive = "E:\"
 }
-$driveInfo = Get-PSDrive -Name $targetDrive.Replace(":", "").Replace("\", "") -ErrorAction SilentlyContinue
+$driveLetter = $targetDrive.Replace(":", "").Replace("\", "")
+$driveInfo = Get-PSDrive -Name $driveLetter -ErrorAction SilentlyContinue
 $freeGB = 0
 if ($driveInfo) {
     $freeGB = [math]::Round($driveInfo.Free / 1GB, 2)
 } else {
-    $disk = Get-CimInstance -ClassName Win32_LogicalDisk -Filter "DeviceID='$targetDrive'" -ErrorAction SilentlyContinue
+    $disk = Get-CimInstance -ClassName Win32_LogicalDisk -Filter "DeviceID='${driveLetter}:'" -ErrorAction SilentlyContinue
     if ($disk) {
         $freeGB = [math]::Round($disk.FreeSpace / 1GB, 2)
     }
 }
-if ($freeGB -ge 300) {
+if ($freeGB -ge 100) {
     Print-Pass "Available disk space" "$freeGB GB free on $targetDrive"
+} elseif ($freeGB -ge 50) {
+    Print-Warn "Available disk space" "$freeGB GB free on $targetDrive (100+ GB recommended for debug builds)"
 } else {
-    Print-Fail "Available disk space" "$freeGB GB free on $targetDrive (Requires 300 GB free)"
+    Print-Fail "Available disk space" "$freeGB GB free on $targetDrive (Requires 50 GB minimum)"
 }
 
 # 15. Total physical RAM check
+# Windows reserves some physical memory for hardware/firmware, so 16 GB
+# physical RAM typically reports as ~15.7 GB available to the OS.
+# PASS at >=16, WARN at >=14 (accounts for OS overhead), FAIL below 14.
 $ramBytes = (Get-CimInstance -ClassName Win32_ComputerSystem).TotalPhysicalMemory
 $ramGB = [math]::Round($ramBytes / 1GB, 2)
 if ($ramGB -ge 32) {
     Print-Pass "Available RAM" "$ramGB GB (Optimal)"
 } elseif ($ramGB -ge 16) {
-    Print-Warn "Available RAM" "$ramGB GB (Minimum is 16 GB, but 32 GB is recommended)"
+    Print-Pass "Available RAM" "$ramGB GB"
+} elseif ($ramGB -ge 14) {
+    Print-Warn "Available RAM" "$ramGB GB (16 GB nominal, but OS overhead likely accounts for the gap)"
 } else {
-    Print-Fail "Available RAM" "$ramGB GB (Requires 16 GB minimum)"
+    Print-Fail "Available RAM" "$ramGB GB (Requires 14 GB minimum usable, 16 GB nominal)"
 }
 
 # Final Report Summary
