@@ -5,7 +5,7 @@ import "./toolbarButton.css";
 import "./ToolbarActions.css";
 
 export function ToolbarActions(): React.JSX.Element {
-  const { sidebarOpen, setSidebarPanel, toggleSidebar } = useUIStore();
+  const { sidebarOpen, setSidebarPanel, toggleSidebar, openSettings } = useUIStore();
 
   const handleSidebarToggle = (): void => {
     toggleSidebar();
@@ -19,7 +19,7 @@ export function ToolbarActions(): React.JSX.Element {
   };
 
   const handleSettingsClick = (): void => {
-    console.log("[ToolbarActions] Settings — Batch 12");
+    openSettings();
   };
 
   return (

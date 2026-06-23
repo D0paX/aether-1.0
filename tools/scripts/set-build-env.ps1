@@ -14,6 +14,18 @@ $env:DEPOT_TOOLS_WIN_TOOLCHAIN = "0"
 $env:vs2022_install = "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools"
 $env:BRAVE_SRC = "E:\src\brave-browser"
 
+# Brave's Python scripts (like brave_chromium_utils) require these paths
+$pyPaths = @(
+    "E:\src\brave-browser\src\brave\script",
+    "E:\src\brave-browser\src\tools\grit\grit\extern",
+    "E:\src\brave-browser\src\brave\vendor\requests",
+    "E:\src\brave-browser\src\brave\third_party\cryptography",
+    "E:\src\brave-browser\src\brave\third_party\macholib",
+    "E:\src\brave-browser\src\third_party\depot_tools"
+)
+$env:PYTHONPATH = $pyPaths -join ";"
+$env:PYTHONUNBUFFERED = "1"
+
 # Persist at user scope (no /M — proven to actually work on this machine)
 setx DEPOT_TOOLS_WIN_TOOLCHAIN 0 | Out-Null
 setx vs2022_install "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools" | Out-Null

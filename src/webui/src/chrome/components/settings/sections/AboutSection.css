@@ -1,0 +1,44 @@
+.about-section-container {
+  padding: var(--space-4);
+}
+
+.about-name {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+}
+
+.about-version {
+  font-size: var(--font-size-base);
+  color: var(--color-text-secondary);
+  margin-top: 4px;
+}
+
+.about-build {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  margin-top: 2px;
+}
+
+.about-divider-wrapper {
+  margin: var(--space-6) 0;
+}
+
+.about-foundation {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-secondary);
+}
+
+.about-licenses-wrapper {
+  margin-top: var(--space-2);
+}
+
+.about-licenses-link {
+  font-size: var(--font-size-sm);
+  color: var(--color-accent);
+  text-decoration: none;
+}
+
+.about-licenses-link:hover {
+  text-decoration: underline;
+}

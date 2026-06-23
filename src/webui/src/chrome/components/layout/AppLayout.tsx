@@ -9,6 +9,7 @@ import { BookmarksBar } from "../toolbar/BookmarksBar";
 import { Sidebar } from "../sidebar/Sidebar";
 import ViewportRegion from "../../../shared/components/ViewportRegion";
 import { StatusBar } from "../statusbar/StatusBar";
+import { SettingsDrawer } from "../settings/SettingsDrawer";
 import "./AppLayout.css";
 
 export default function AppLayout(): React.JSX.Element {
@@ -53,6 +54,8 @@ export default function AppLayout(): React.JSX.Element {
       <div className="status-bar-row">
         <StatusBar />
       </div>
+
+      <SettingsDrawer />
     </div>
   );
 }

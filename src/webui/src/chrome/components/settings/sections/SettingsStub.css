@@ -1,0 +1,22 @@
+.settings-stub {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  background: var(--color-glass);
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--color-border);
+}
+
+.settings-stub-icon {
+  color: var(--color-text-tertiary);
+  margin-bottom: var(--space-3);
+  display: flex;
+}
+
+.settings-stub-message {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-tertiary);
+  margin-top: var(--space-3);
+}

@@ -1,6 +1,7 @@
 .ntp-speed-dial-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
   gap: var(--space-4);
   width: min(680px, calc(100vw - 48px));
   position: relative;

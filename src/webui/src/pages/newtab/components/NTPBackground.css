@@ -3,36 +3,39 @@
   inset: 0;
   pointer-events: none;
   z-index: 0;
+  background-color: var(--color-bg);
+  overflow: hidden;
 }
 
 .ntp-orb {
   position: absolute;
   border-radius: 9999px;
+  opacity: 0.8;
 }
 
 .ntp-orb-1 {
-  width: 500px;
-  height: 500px;
-  top: -100px;
-  left: -100px;
-  background: radial-gradient(circle, rgba(0, 113, 227, 0.10), transparent 65%);
-  filter: blur(80px);
+  width: 140vw;
+  height: 140vh;
+  top: -50vh;
+  left: -20vw;
+  background: radial-gradient(ellipse at center, rgba(16, 50, 140, 0.35), transparent 60%);
+  filter: blur(140px);
 }
 
 .ntp-orb-2 {
-  width: 380px;
-  height: 380px;
-  bottom: -80px;
-  right: -80px;
-  background: radial-gradient(circle, rgba(175, 82, 222, 0.09), transparent 65%);
-  filter: blur(70px);
+  width: 120vw;
+  height: 120vh;
+  bottom: -40vh;
+  right: -20vw;
+  background: radial-gradient(ellipse at center, rgba(0, 20, 80, 0.4), transparent 65%);
+  filter: blur(120px);
 }
 
 .ntp-orb-3 {
-  width: 240px;
-  height: 240px;
-  top: 45%;
-  left: 65%;
-  background: radial-gradient(circle, rgba(52, 199, 89, 0.07), transparent 65%);
-  filter: blur(60px);
+  width: 100vw;
+  height: 100vh;
+  top: 10vh;
+  left: 10vw;
+  background: radial-gradient(ellipse at center, rgba(30, 80, 220, 0.2), transparent 70%);
+  filter: blur(160px);
 }

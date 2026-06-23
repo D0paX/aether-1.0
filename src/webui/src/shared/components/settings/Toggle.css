@@ -1,0 +1,50 @@
+.aether-toggle-track {
+  border-radius: 9999px;
+  transition: background var(--duration-base);
+  position: relative;
+}
+
+.aether-toggle-track:not(.disabled) {
+  cursor: pointer;
+}
+
+.aether-toggle-track.disabled {
+  cursor: not-allowed;
+  opacity: 0.45;
+}
+
+.aether-toggle-track.checked {
+  background: var(--color-success);
+}
+
+.aether-toggle-track.unchecked {
+  background: var(--color-border-strong);
+}
+
+.aether-toggle-track-md {
+  width: 36px;
+  height: 20px;
+}
+
+.aether-toggle-track-sm {
+  width: 28px;
+  height: 16px;
+}
+
+.aether-toggle-thumb {
+  border-radius: 9999px;
+  background: white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  top: 2px;
+}
+
+.aether-toggle-thumb-md {
+  width: 16px;
+  height: 16px;
+}
+
+.aether-toggle-thumb-sm {
+  width: 12px;
+  height: 12px;
+}

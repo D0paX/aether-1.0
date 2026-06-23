@@ -2,7 +2,12 @@
 # Apply these args when running: gn gen out/AetherDebug --args="$(cat aether/tools/gn/aether_args.gn | grep -v '^#' | tr '\n' ' ')"
 # Or use tools/scripts/build.ps1 which applies them automatically.
 
-import("//aether/tools/gn/aether_branding.gni")
+# import("//aether/tools/gn/aether_branding.gni")
+
+import("//brave/build/args/brave_defaults.gni")
+import("//brave/build/args/blink_platform_defaults.gni")
+import("//brave/build/args/branding_defaults.gni")
+import("//brave/build/args/desktop_defaults.gni")
 
 # ─────────────────────────────────────────────────
 # DEVELOPMENT BUILD ARGS
@@ -10,7 +15,7 @@ import("//aether/tools/gn/aether_branding.gni")
 # ─────────────────────────────────────────────────
 
 # The branding path component to use for build configuration (set to Aether product name).
-branding_path_component = aether_product_name
+branding_path_component = "brave" # aether_product_name
 
 # Aether does not include Brave Wallet.
 # This feature was disabled using the GN build flag approach (enable_brave_wallet = false)

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { useTheme } from "./shared/hooks/useTheme";
 import { useTabKeyboard } from "./chrome/hooks/useTabKeyboard";
 import { navigationStore } from "./chrome/store/navigationStore";
+import { initSettingsSideEffects } from "./chrome/store/settingsSideEffects";
 import AppLayout from "./chrome/components/layout/AppLayout";
 
 /**
@@ -14,6 +15,7 @@ export default function App(): React.JSX.Element {
 
   useEffect(() => {
     void navigationStore.getState().initialize();
+    initSettingsSideEffects();
   }, []);
 
   return <AppLayout />;

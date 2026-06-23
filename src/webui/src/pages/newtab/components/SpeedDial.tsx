@@ -8,14 +8,6 @@ const DEFAULT_SITES = [
   { id: 2,  name: "GitHub",   url: "https://github.com",           color: "#24292F", letter: "G" },
   { id: 3,  name: "X",        url: "https://x.com",                color: "#000000", letter: "X" },
   { id: 4,  name: "Notion",   url: "https://notion.so",            color: "#2B2B2B", letter: "N" },
-  { id: 5,  name: "Figma",    url: "https://figma.com",            color: "#F24E1E", letter: "F" },
-  { id: 6,  name: "Gmail",    url: "https://gmail.com",            color: "#EA4335", letter: "M" },
-  { id: 7,  name: "Drive",    url: "https://drive.google.com",     color: "#4285F4", letter: "D" },
-  { id: 8,  name: "Claude",   url: "https://claude.ai",            color: "#CC785C", letter: "C" },
-  { id: 9,  name: "Reddit",   url: "https://reddit.com",           color: "#FF4500", letter: "R" },
-  { id: 10, name: "Spotify",  url: "https://open.spotify.com",     color: "#1DB954", letter: "S" },
-  { id: 11, name: "Netflix",  url: "https://netflix.com",          color: "#E50914", letter: "N" },
-  { id: 12, name: "ChatGPT",  url: "https://chatgpt.com",          color: "#10A37F", letter: "G" },
 ];
 
 export function SpeedDial(): React.JSX.Element {

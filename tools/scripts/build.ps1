@@ -1,4 +1,4 @@
-# Aether Browser — Windows Build Script
+﻿# Aether Browser â€” Windows Build Script
 # Builds Aether for Windows using the Brave/Chromium build system.
 # Usage: build.ps1 [-Target Debug|Release] [-ReconfigureOnly] [-Jobs <n>] [-Clean]
 # Prerequisites: Complete docs/development/SETUP_WINDOWS.md and docs/development/BRAVE_FORK_GUIDE.md
@@ -27,13 +27,13 @@ if ($Jobs -gt 0) {
 Write-Host "Started at:       $($startTime.ToString('yyyy-MM-dd HH:mm:ss'))" -ForegroundColor Cyan
 Write-Host "==================================================" -ForegroundColor Cyan
 
-# ─────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # Step 1: Locate Brave source directory
-# ─────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 $BraveSrc = if ($env:BRAVE_SRC) { $env:BRAVE_SRC } else { "C:\src\brave-browser" }
 
-Write-Host "`n[1/6] Locating Brave source..." -ForegroundColor Green
+Write-Host "`n[1/7] Locating Brave source..." -ForegroundColor Green
 
 if (-not (Test-Path $BraveSrc)) {
     Write-Host "[FAIL] Brave source directory not found at: $BraveSrc" -ForegroundColor Red
@@ -52,20 +52,20 @@ if (-not (Test-Path $chromiumSrc)) {
 Write-Host "Brave source: $BraveSrc" -ForegroundColor Green
 Write-Host "Chromium src: $chromiumSrc" -ForegroundColor Green
 
-# ─────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # Step 2: Determine output directory
-# ─────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-Write-Host "`n[2/6] Configuring output directory..." -ForegroundColor Green
+Write-Host "`n[2/7] Configuring output directory..." -ForegroundColor Green
 
 $outDirName = if ($Target -eq "Release") { "AetherRelease" } else { "AetherDebug" }
 $outDir = Join-Path $chromiumSrc "out\$outDirName"
 
 Write-Host "Output directory: $outDir" -ForegroundColor Green
 
-# ─────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # Step 3: Handle -Clean flag
-# ─────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 if ($Clean) {
     Write-Host "`n[CLEAN] Removing output directory: $outDir" -ForegroundColor Yellow
@@ -77,11 +77,11 @@ if ($Clean) {
     }
 }
 
-# ─────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # Step 4: Parse GN args from aether_args.gn
-# ─────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-Write-Host "`n[3/6] Parsing GN build arguments..." -ForegroundColor Green
+Write-Host "`n[3/7] Parsing GN build arguments..." -ForegroundColor Green
 
 $repoRoot = Split-Path -Parent (Split-Path -Parent $PSScriptRoot)
 $gnArgsFile = Join-Path $repoRoot "tools\gn\aether_args.gn"
@@ -91,61 +91,86 @@ if (-not (Test-Path $gnArgsFile)) {
     exit 1
 }
 
-# Read each line, skip comments and blank lines, collect key=value pairs
-$gnLines = Get-Content $gnArgsFile | ForEach-Object {
-    $line = $_.Trim()
-    if ($line -eq "" -or $line.StartsWith("#")) {
-        # Skip comments and blank lines
-    } else {
-        $line
-    }
-} | Where-Object { $_ -ne $null }
-
-# Build a hashtable for easy override
-$argsMap = @{}
-foreach ($line in $gnLines) {
-    if ($line -match '^\s*(\S+)\s*=\s*(.+)$') {
-        $argsMap[$Matches[1]] = $Matches[2]
-    }
+# Read aether_args.gn, strip comments and blank lines, preserve remaining lines verbatim
+$gnArgsLines = Get-Content $gnArgsFile | Where-Object {
+    $_.Trim() -ne "" -and -not $_.Trim().StartsWith("#")
 }
 
 # Apply release overrides if building for Release
+$finalArgsLines = @()
+$overrides = @{}
 if ($Target -eq "Release") {
     Write-Host "Applying release build overrides..." -ForegroundColor Yellow
-    $argsMap["is_component_build"] = "false"
-    $argsMap["use_thin_lto"] = "true"
-    $argsMap["concurrent_links"] = "1"
-    $argsMap["symbol_level"] = "0"
+    $overrides["is_component_build"] = "false"
+    $overrides["use_thin_lto"] = "true"
+    $overrides["concurrent_links"] = "1"
+    $overrides["symbol_level"] = "0"
 }
 
-# Construct the final GN args string
-$gnArgsString = ($argsMap.GetEnumerator() | ForEach-Object { "$($_.Key) = $($_.Value)" }) -join " "
+foreach ($line in $gnArgsLines) {
+    if ($line -match '^\s*(\S+)\s*=') {
+        $key = $Matches[1]
+        if ($overrides.ContainsKey($key)) {
+            $finalArgsLines += "$key = $($overrides[$key])"
+            $overrides.Remove($key)
+            continue
+        }
+    }
+    $finalArgsLines += $line
+}
+foreach ($key in $overrides.Keys) {
+    $finalArgsLines += "$key = $($overrides[$key])"
+}
 
-Write-Host "GN args: $gnArgsString" -ForegroundColor Cyan
-
-# ─────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # Step 5: Run GN to generate build files
-# ─────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-Write-Host "`n[4/6] Running GN to generate build files..." -ForegroundColor Green
+Write-Host "`n[4/7] Running prepare step..." -ForegroundColor Green
+$prepareCommand = "node ./build/commands/scripts/commands.js build -C out\$outDirName --prepare_only"
+Write-Host "Command: $prepareCommand" -ForegroundColor Cyan
+Push-Location (Join-Path $chromiumSrc "brave")
+try {
+    & node ./build/commands/scripts/commands.js build -C out\$outDirName --prepare_only
+    if ($LASTEXITCODE -ne 0) {
+        Write-Host "[FAIL] Prepare step failed with exit code $LASTEXITCODE" -ForegroundColor Red
+        Pop-Location
+        exit 1
+    }
+} catch {
+    Write-Host "[FAIL] Prepare step threw an exception: $_" -ForegroundColor Red
+    Pop-Location
+    exit 1
+}
+Pop-Location
 
-$gnCommand = "gn gen `"out\$outDirName`" --args=`"$gnArgsString`""
-Write-Host "Command: $gnCommand" -ForegroundColor Cyan
+Write-Host "`n[5/7] Running GN to generate build files..." -ForegroundColor Green
+
+$outDirAbs = Join-Path $chromiumSrc "out\$outDirName"
+New-Item -ItemType Directory -Force -Path $outDirAbs | Out-Null
+
+# Write args directly as a real args.gn file
+$argsGnPath = Join-Path $outDirAbs "args.gn"
+[System.IO.File]::WriteAllLines($argsGnPath, $finalArgsLines)
+
+Write-Host "Wrote GN args to: $argsGnPath" -ForegroundColor Cyan
+Write-Host "--- args.gn content ---" -ForegroundColor Cyan
+Get-Content $argsGnPath | ForEach-Object { Write-Host "  $_" }
+
+Write-Host "Command: gn gen `"out\$outDirName`"" -ForegroundColor Cyan
 Write-Host "Working directory: $chromiumSrc" -ForegroundColor Cyan
 
 Push-Location $chromiumSrc
 try {
-    $gnResult = & gn gen "out\$outDirName" --args="$gnArgsString" 2>&1
+    & gn gen "out\$outDirName"
     $gnExitCode = $LASTEXITCODE
 
     if ($gnExitCode -ne 0) {
         Write-Host "[FAIL] GN configuration failed with exit code $gnExitCode" -ForegroundColor Red
-        Write-Host $gnResult -ForegroundColor Red
         Pop-Location
         exit 1
     }
 
-    Write-Host $gnResult -ForegroundColor Green
     Write-Host "[PASS] GN configuration completed successfully." -ForegroundColor Green
 } catch {
     Write-Host "[FAIL] GN configuration threw an exception: $_" -ForegroundColor Red
@@ -153,9 +178,9 @@ try {
     exit 1
 }
 
-# ─────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # Step 6: Stop here if -ReconfigureOnly
-# ─────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 if ($ReconfigureOnly) {
     Pop-Location
@@ -169,11 +194,11 @@ if ($ReconfigureOnly) {
     exit 0
 }
 
-# ─────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # Step 7: Run Ninja to compile
-# ─────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-Write-Host "`n[5/6] Running Ninja to compile..." -ForegroundColor Green
+Write-Host "`n[6/7] Running Ninja to compile..." -ForegroundColor Green
 
 $ninjaArgs = @("-C", "out\$outDirName", "chrome")
 
@@ -205,11 +230,11 @@ try {
 
 Pop-Location
 
-# ─────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 # Step 8: Report results
-# ─────────────────────────────────────────────────
+# â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
-Write-Host "`n[6/6] Verifying build output..." -ForegroundColor Green
+Write-Host "`n[7/7] Verifying build output..." -ForegroundColor Green
 
 $exePath = Join-Path $outDir "chrome.exe"
 if (Test-Path $exePath) {
